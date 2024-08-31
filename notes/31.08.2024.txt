@@ -11,3 +11,34 @@ Set project's output directory to
     $(SolutionDir)bin\$(Configuration)_$(Platform)\
 Set project's intermediate directory to
     $(SolutionDir)bin\intermediate\$(Configuration)_$(Platform)\
+
+Create a new empty project called Database.
+Set Database's Configuration Type to be
+    Static library (.lib)
+Set Database's output directory to
+    $(SolutionDir)bin\$(Configuration)_$(Platform)\
+Set Database's intermediate directory to
+    $(SolutionDir)bin\intermediate\$(ProjectName)\$(Configuration)_$(Platform)\
+Now looking back to it, it's better to also set WordLearner's intermediate directory to be this
+    $(SolutionDir)bin\intermediate\$(ProjectName)\$(Configuration)_$(Platform)\
+so that the 2 projects can have separate intermediate directories but both under the same bin directory.
+Inside Database project create a new directory
+    src
+and inside of it create a header file and a source file
+    Database.h
+    Database.cpp
+Declare and implement some example function
+    void databaseFunction();
+Now I can build Database project and a file Database.lib is created in the output directory.
+Let's link this library to WordLearner and try to call databaseFunction().
+First add this to WordLearner's include directories
+    $(SolutionDir)Database\src\
+Then add this to WordLearner's library directories
+    $(OutDir)
+and finally add this to WordLearner's dependencies
+    Database.lib
+Now in WordLearner in main.cpp I can successfully include Database's header
+    #include "Database.h"
+and call the example function
+    databaseFunction()
+and it works!

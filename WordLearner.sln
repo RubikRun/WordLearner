@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WordLearner", "WordLearner\WordLearner.vcxproj", "{E08442B5-8338-4981-8216-7AC1C2451798}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AAC65335-2999-4731-809E-9798143CF65D} = {AAC65335-2999-4731-809E-9798143CF65D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Database", "Database\Database.vcxproj", "{AAC65335-2999-4731-809E-9798143CF65D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{E08442B5-8338-4981-8216-7AC1C2451798}.Debug|x64.Build.0 = Debug|x64
 		{E08442B5-8338-4981-8216-7AC1C2451798}.Release|x64.ActiveCfg = Release|x64
 		{E08442B5-8338-4981-8216-7AC1C2451798}.Release|x64.Build.0 = Release|x64
+		{AAC65335-2999-4731-809E-9798143CF65D}.Debug|x64.ActiveCfg = Debug|x64
+		{AAC65335-2999-4731-809E-9798143CF65D}.Debug|x64.Build.0 = Debug|x64
+		{AAC65335-2999-4731-809E-9798143CF65D}.Release|x64.ActiveCfg = Release|x64
+		{AAC65335-2999-4731-809E-9798143CF65D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
