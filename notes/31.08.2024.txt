@@ -42,3 +42,9 @@ Now in WordLearner in main.cpp I can successfully include Database's header
 and call the example function
     databaseFunction()
 and it works!
+
+By the way, the default Qt C++ project in Visual Studio is created without a console, just a GUI window.
+I want to have a console together with the window.
+Enabling a console is done by going to
+    Project Settings -> Linker -> System
+and setting SubSystem to Console
