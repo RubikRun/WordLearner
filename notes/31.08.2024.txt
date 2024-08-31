@@ -1,0 +1,4 @@
+Decided how to name the application - WordLearner.
+Created a GitHub repository called WordLearner.
+Created a default Qt C++ project in Visual Studio.
+Planned the application's architecture, functionality and UI.

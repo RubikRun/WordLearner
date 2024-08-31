@@ -1,0 +1,58 @@
+I want to create a desktop application with GUI that helps me learn words in a foreign language.
+My choice of technologies is C++ with Qt because I have experience with that and I use it at work.
+
+Let's plan what the application is going to do exactly.
+
+First I will plan and implement version 0.1 which will be a minimalistic version
+doing only the bare minimum but in a solid way so that it can be a good base for future development. 
+
+
+=============================================================================================================================
+1. Database
+=============================================================================================================================
+Database is loaded when user launches the application,
+and it's exported when user closes the application.
+
+1.1 Word
+The most basic piece of data is going to be a word.
+A word consists of:
+- int id: Unique ID across all objects in the application
+- string aTerm: The word in language A
+- string bTerm: The word in language B
+- string note: Some additional note, explanation, or example
+
+1.2. WordSet
+A bunch of words grouped together by user, is called a word set.
+A word set consists of:
+- int id: Unique ID across all objects in the application
+- list<int>: A list containing IDs of all the words of the word set
+- string name: The word set's name
+
+
+=============================================================================================================================
+2. UI
+=============================================================================================================================
+When user launches the application, they will be presented with the main window.
+
+2.1. Main Window
+The main window consists of:
+- A list of word sets, specifically their names.
+    - A button for adding a new word set
+    - Support editing word set's name directly in the list
+    - Next to each word set there will be a delete button for deleting that word set.
+- A list of words in the selected word set, serialized in some way that shows their aTerm, bTerm and note.
+    - A button for adding a new word to the selected word set
+    - Support editing a word directly in the list
+    - Next to each word there will be a delete button for deleting that word.
+
+Basically user should be able to easily see, create, update and delete words and word sets.
+
+There will be a global word set, called "global" with id=0.
+This global set will contain all words in the database.
+User will not be able to rename or delete the global set.
+User will be able to see, create, update and delete words in the global set.
+When user creates a word in another set, it will automatically be added to the global set.
+When user deletes a word from another set, it will be removed from that set but not from the global set.
+If user wants to delete a word globally, they can delete it from global set or from any other set while holding down Shift.
+
+This concludes version 0.1.
