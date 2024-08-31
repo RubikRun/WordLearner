@@ -2,3 +2,12 @@ Decided how to name the application - WordLearner.
 Created a GitHub repository called WordLearner.
 Created a default Qt C++ project in Visual Studio.
 Planned the application's architecture, functionality and UI.
+
+Moved source fles and header file from $(SolutionDir) to a new directory
+    src
+Moved .ui file and .qrc file to a new directory
+    src\QtResources
+Set project's output directory to
+    $(SolutionDir)bin\$(Configuration)_$(Platform)\
+Set project's intermediate directory to
+    $(SolutionDir)bin\intermediate\$(Configuration)_$(Platform)\
