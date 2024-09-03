@@ -18,6 +18,12 @@
     <ClInclude Include="src\Database.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Word.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WordSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Database.cpp">

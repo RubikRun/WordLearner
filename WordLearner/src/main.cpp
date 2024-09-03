@@ -1,14 +1,19 @@
+#include <windows.h>
+
 #include "WordLearnerMainWindow.h"
 #include <QtWidgets/QApplication>
 
-// TEMP: Testing to see if Database links properly
 #include "Database.h"
 
 int main(int argc, char *argv[])
 {
-    // TEMP: Testing to see if Database links properly
-    WordLearner::Database::databaseFunction();
-
+    // Set console's output code page to UTF-8
+    // so that it can write cyrillic characters
+    SetConsoleOutputCP(CP_UTF8);
+    // Load database
+    WordLearner::Database database;
+    database.load();
+    // Create Qt application and run it
     QApplication a(argc, argv);
     WordLearnerMainWindow w;
     w.show();

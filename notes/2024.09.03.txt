@@ -1,0 +1,27 @@
+Then we will need functions for loading the words and word sets from data files
+    void loadWords(const std::string& dataFilepath);
+    void loadWordSets(const std::string& dataFilepath);
+These functions will be private, we will expose a single public function in Database
+    void load();
+that loads the whole database.
+Before implementing these 2 functions we will need to have a list of separators.
+It's more convenient that it's a single string, instead of a list of characters
+    std::string separators;
+and a function that reads them from their data file.
+    void loadSeparators(const std::string& dataFilepath);
+Again this function will be private and called from load().
+Inside of load() we should call all other load*() functions and pass the filepaths to the corresponding data files.
+The default working directory in a Visual Studio project is
+    $(ProjectDir)
+but let's make it be
+    $(SolutionDir)
+so that we can write filepaths like this
+    loadSeparators("Database/data/separators.data");
+    loadWords("Database/data/words.data");
+    loadWordSets("Database/data/word_sets.data");
+
+We have a problem with displaying cyrillic characters on the console.
+Solution is to tell console to use UTF-8 in main.cpp, with this:
+    #include <windows.h>
+    ...
+    SetConsoleOutputCP(CP_UTF8);

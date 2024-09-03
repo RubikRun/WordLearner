@@ -25,8 +25,8 @@ A word consists of:
 A bunch of words grouped together by user, is called a word set.
 A word set consists of:
 - int id: Unique ID across all objects in the application
-- list<int>: A list containing IDs of all the words of the word set
 - string name: The word set's name
+- list<int>: A list containing IDs of all the words of the word set
 
 
 =============================================================================================================================

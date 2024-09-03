@@ -81,6 +81,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Database.h" />
+    <ClInclude Include="src\Word.h" />
+    <ClInclude Include="src\WordSet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Database.cpp" />

@@ -1,0 +1,42 @@
+Let's try to implement the database now.
+
+First create a new directory
+    data
+inside of Database project and create some example data files
+    separators.data - Contains the characters to be used as separators in data files
+    words.data - Contains all words in database, one per line
+    word_sets.data - Contains all word sets in database, one per line
+
+The format that I will use is quite simple.
+Each .data file contains all objects of a certain type.
+Each line in a .data file represents one object serialized in the following way:
+    Object's properties are written in order, separated with the first separator from separators.data
+    Single properties (strings, numbers, bool, etc.) are just written normally.
+    List properties are serialized by writing their elements in order, separated with the second separator from separators.data
+    If an element of a list is a list, it is serialized by writing its elements in order, separated with the third separator from separators.data
+    etc.
+Basically first separator is used to separate object's properties
+and next separators are used for elements of lists depending on how nested they are.
+For example, if one of our types consists of
+    - list<int>
+    - list<list<int>>
+and our separators are ;,# then an example of a serialized object of that type would be:
+    2,4,254,6;6#6#7#900,12#13#14,8,88#888888
+and this serialization corresponds to this object:
+    - {2, 4, 254}
+    - { {6, 6, 6, 7, 900}, {12, 13, 14}, {8}, {88, 888888} }
+In the future I might switch to .json so that it's easier to create/read data files manually.
+But for now I like this approach because it's easier to implement.
+
+Now let's begin by creating structs for Word and WordSet, just for holding their data
+    struct Word
+    struct WordSet
+in 2 new files in Database\src
+    Word.h
+    WordSet.h
+
+Inside Database class we will need to have a list of words and a list of word sets
+    std::vector<Word> m_words;
+    std::vector<WordSet> m_wordSets;
+
+TODO: loggin system
