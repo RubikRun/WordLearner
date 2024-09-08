@@ -8,7 +8,12 @@ Not that it matters much, our .data files will probably contain at most 10k obje
 Of course, separators.data is a special case, we don't need to have the number of objects there.
 
 TODO: When loading words check for uniqueness of IDs
+TODO: When loading word sets check for uniqueness of IDs
+TODO: When loading word sets check if words list contains existing IDs
 
-I also added a function
+I also added functions
     printWords()
-for printing all the words to the console.
+    printWordSet()
+for printing all loaded words and word sets to the console
+
+TODO: In Database in parseListInt() make the first written thing be the number of elements so that we can allocate memory more effeciently.

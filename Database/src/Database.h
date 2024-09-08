@@ -25,12 +25,23 @@ namespace WordLearner {
 
 		// TODO: comment
 		bool parseWord(const std::string& decl, int lineIdx, Word& word) const;
+		// TODO: comment
+		bool parseWordSet(const std::string& decl, int lineIdx, WordSet& wordSet) const;
+
+		// TODO: comment
+		bool parseListOfInt(const std::string& decl, std::vector<int>& list) const;
 
 		// TODO: comment
 		std::string serializeWord(const Word& word) const;
+		// TODO: comment
+		std::string serializeWordSet(const WordSet& wordSet) const;
+		// TODO: comment
+		std::string serializeListInt(const std::vector<int>& list) const;
 
 		// TODO: comment
 		void printWords() const;
+		// TODO: comment
+		void printWordSets() const;
 
 	private: /* variables */
 		// A list of all words in the database
