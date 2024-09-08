@@ -23,6 +23,15 @@ namespace WordLearner {
 		// TODO: comment
 		void loadSeparators(const std::string& dataFilepath);
 
+		// TODO: comment
+		bool parseWord(const std::string& decl, int lineIdx, Word& word) const;
+
+		// TODO: comment
+		std::string serializeWord(const Word& word) const;
+
+		// TODO: comment
+		void printWords() const;
+
 	private: /* variables */
 		// A list of all words in the database
 		std::vector<Word> m_words;
@@ -30,7 +39,7 @@ namespace WordLearner {
 		std::vector<WordSet> m_wordSets;
 		// A string containing the separators used in data files
 		// to separate object properties and list elements
-		std::string separators;
+		std::string m_separators;
 	};
 
 } // namespace WordLearner

@@ -10,9 +10,9 @@ namespace WordLearner
 		// Word's ID, unique across all objects in the application
 		int id = -1;
 		// Word in language A
-		std::string aTerm;
+		std::string termA;
 		// Word in language B
-		std::string bTerm;
+		std::string termB;
 		// Additional note, explanation or example
 		std::string note;
 	};

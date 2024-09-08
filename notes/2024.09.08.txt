@@ -1,0 +1,14 @@
+Now I need to finish implementing loadWords() and loadWordSets() in Database.
+Last time I managed to open file and read it line by line. Now I need to process each line.
+
+It seems like a good idea to have the number of objects written on the first line of each .data file.
+That way when we load .data files we can first read the number of objects and allocate memory for that many objects,
+instead of adding them one by one and having our memory grow dynamically.
+Not that it matters much, our .data files will probably contain at most 10k objects, but still.
+Of course, separators.data is a special case, we don't need to have the number of objects there.
+
+TODO: When loading words check for uniqueness of IDs
+
+I also added a function
+    printWords()
+for printing all the words to the console.
