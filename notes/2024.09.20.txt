@@ -1,0 +1,44 @@
+Today let's begin by creating a logging system (from old TO-DO)
+First thing to consider is do I want to have separate loggers for Database project and WordLearner project
+or do I want to have a third project called Utils that has a logger (and other things in the future)
+and it will be used by both Database and WordLearner.
+I think I'll go with the Utils approach.
+
+Create a new empty project called Utils.
+I will configure it same as Database.
+Explicitly remove Win32.
+Set Util's Configuration Type to be
+    Static library (.lib)
+Set Utils's output directory to be
+    $(SolutionDir)bin\$(Configuration)_$(Platform)\
+Set Utils's intermediate directory to be
+    $(SolutionDir)bin\intermediate\$(ProjectName)\$(Configuration)_$(Platform)\
+Inside Utils project create a new directory
+    src
+and inside of it create a header file
+    Logger.hpp
+IMPORTANT: For now I will not create any source files that need to be compiled
+           so we don't actually need to link Utils library to Database and WordLearner,
+           but in the future we will need to link it.
+Add this to WordLearner's and Database's include directories
+    $(SolutionDir)Utils\src\
+
+Inside Logger.hpp I created some macros for logging different types of messages
+    WL_LOG_ERROR, WL_LOG_ERRORF,
+    WL_LOG_WARNING, WL_LOG_WARNINGF,
+    WL_LOG_DEBUG, WL_LOG_DEBUGF,
+    WL_LOG_INFO, WL_LOG_INFOF
+The F versions log a message together with the file name where the macro is used.
+The non-F versions log only the message.
+The way the F-versions work is that they use a macro WL_FILENAME that is supposed to be defined
+at the top of each file that uses Logger.hpp and then #undef-ed at the end of the file.
+I also created these macros
+    WL_LOGGER_ENABLED_ERROR
+    WL_LOGGER_ENABLED_WARNING
+    WL_LOGGER_ENABLED_DEBUG
+    WL_LOGGER_ENABLED_INFO
+for enabling/disabling logging of the different types of messages.
+
+Now let's include Logger.hpp in Database.cpp
+    #include "Logger.hpp"
+and replace all calls to std::cout with a macro from Logger.hpp

@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WordLearner", "WordLearner\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Database", "Database\Database.vcxproj", "{AAC65335-2999-4731-809E-9798143CF65D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utils", "Utils\Utils.vcxproj", "{80C6808C-9416-4E1B-AFCE-4E17104DA774}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -24,6 +26,10 @@ Global
 		{AAC65335-2999-4731-809E-9798143CF65D}.Debug|x64.Build.0 = Debug|x64
 		{AAC65335-2999-4731-809E-9798143CF65D}.Release|x64.ActiveCfg = Release|x64
 		{AAC65335-2999-4731-809E-9798143CF65D}.Release|x64.Build.0 = Release|x64
+		{80C6808C-9416-4E1B-AFCE-4E17104DA774}.Debug|x64.ActiveCfg = Debug|x64
+		{80C6808C-9416-4E1B-AFCE-4E17104DA774}.Debug|x64.Build.0 = Debug|x64
+		{80C6808C-9416-4E1B-AFCE-4E17104DA774}.Release|x64.ActiveCfg = Release|x64
+		{80C6808C-9416-4E1B-AFCE-4E17104DA774}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

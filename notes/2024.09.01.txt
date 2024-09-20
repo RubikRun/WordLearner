@@ -39,4 +39,4 @@ Inside Database class we will need to have a list of words and a list of word se
     std::vector<Word> m_words;
     std::vector<WordSet> m_wordSets;
 
-TODO: loggin system
+DONE: loggin system

@@ -1,8 +1,11 @@
+#define WL_FILENAME "Database.cpp"
+
 #include "Database.h"
 
 #include <fstream>
 #include <sstream>
-#include <iostream>
+
+#include "Logger.hpp"
 
 static bool DO_DEBUG_DATABASE = true;
 
@@ -19,14 +22,14 @@ namespace WordLearner {
 	{
 		if (m_separators.empty())
 		{
-			std::cout << "ERROR (Database): Cannot load words before loading separators.\n";
+			WL_LOG_ERRORF("Cannot load words before loading separators.");
 			return;
 		}
 		// Open data file with an input stream
 		std::ifstream dataFile(dataFilepath);
 		if (!dataFile.is_open())
 		{
-			std::cout << "ERROR (Database): Cannot open words data file.\n";
+			WL_LOG_ERRORF("Cannot open words data file.");
 			return;
 		}
 		// Read first line which is the number of words in the file
@@ -40,12 +43,12 @@ namespace WordLearner {
 			}
 			catch (...)
 			{
-				std::cout << "WARNING (Database): Words data file's first line is not a valid number. It should be number of objects in file.\n";
+				WL_LOG_WARNINGF("Words data file's first line is not a valid number. It should be number of objects in file.");
 			}
 		}
 		else
 		{
-			std::cout << "ERROR (Database): Words data file is empty.\n";
+			WL_LOG_ERRORF("Words data file is empty.");
 			dataFile.close();
 			return;
 		}
@@ -71,12 +74,12 @@ namespace WordLearner {
 			}
 			else
 			{
-				std::cout << "ERROR (Database): Invalid word on line " << lineIdx << ".\n";
+				WL_LOG_ERRORF("Invalid word on line " << lineIdx << ".");
 			}
 			lineIdx++;
 		}
 		// Log info about loaded words
-		std::cout << "INFO (Database): Successfully loaded " << wordsProcessed << " words.\n";
+		WL_LOG_INFOF("Successfully loaded " << wordsProcessed << " words.");
 		if (DO_DEBUG_DATABASE)
 		{
 			printWords();
@@ -84,13 +87,13 @@ namespace WordLearner {
 		// Check if the words we processed are as many as the file says
 		if (wordsCount != -1 && wordsProcessed != wordsCount)
 		{
-			std::cout << "WARNING (Database): Words in data file are not as many as the first line says.\n";
+			WL_LOG_WARNINGF("Words in data file are not as many as the first line says.");
 		}
 		// Close data file stream
 		dataFile.close();
 		if (dataFile.is_open())
 		{
-			std::cout << "ERROR (Database): Cannot close words data file.\n";
+			WL_LOG_ERRORF("Cannot close words data file.");
 		}
 	}
 
@@ -98,19 +101,19 @@ namespace WordLearner {
 	{
 		if (m_separators.empty())
 		{
-			std::cout << "ERROR (Database): Cannot load word sets before loading separators.\n";
+			WL_LOG_ERRORF("Cannot load word sets before loading separators.");
 			return;
 		}
 		if (m_separators.size() < 2)
 		{
-			std::cout << "ERROR (Database): Cannot load word sets because we have loaded only 1 separator, we need at least 2.\n";
+			WL_LOG_ERRORF("Cannot load word sets because we have loaded only 1 separator, we need at least 2.");
 			return;
 		}
 		// Open data file with an input stream
 		std::ifstream dataFile(dataFilepath);
 		if (!dataFile.is_open())
 		{
-			std::cout << "ERROR (Database): Cannot open word sets data file.\n";
+			WL_LOG_ERRORF("Cannot open word sets data file.");
 			return;
 		}
 		// Read first line which is the number of word sets in the file
@@ -124,12 +127,12 @@ namespace WordLearner {
 			}
 			catch (...)
 			{
-				std::cout << "WARNING (Database): Word sets data file's first line is not a valid number. It should be number of objects in file.\n";
+				WL_LOG_WARNINGF("Word sets data file's first line is not a valid number. It should be number of objects in file.");
 			}
 		}
 		else
 		{
-			std::cout << "ERROR (Database): Word sets data file is empty.\n";
+			WL_LOG_ERRORF("Word sets data file is empty.");
 			dataFile.close();
 			return;
 		}
@@ -155,12 +158,12 @@ namespace WordLearner {
 			}
 			else
 			{
-				std::cout << "ERROR (Database): Invalid word set on line " << lineIdx << ".\n";
+				WL_LOG_ERRORF("Invalid word set on line " << lineIdx << ".");
 			}
 			lineIdx++;
 		}
 		// Log info about loaded word sets
-		std::cout << "INFO (Database): Successfully loaded " << wordSetsProcessed << " word sets.\n";
+		WL_LOG_INFOF("Successfully loaded " << wordSetsProcessed << " word sets.");
 		if (DO_DEBUG_DATABASE)
 		{
 			printWordSets();
@@ -168,13 +171,13 @@ namespace WordLearner {
 		// Check if the word sets we processed are as many as the file says
 		if (wordSetsCount != -1 && wordSetsProcessed != wordSetsCount)
 		{
-			std::cout << "WARNING (Database): Word sets in data file are not as many as the first line says.\n";
+			WL_LOG_WARNINGF("Word sets in data file are not as many as the first line says.");
 		}
 		// Close data file stream
 		dataFile.close();
 		if (dataFile.is_open())
 		{
-			std::cout << "ERROR (Database): Cannot close word sets data file.\n";
+			WL_LOG_ERRORF("Cannot close word sets data file.");
 		}
 	}
 
@@ -184,7 +187,7 @@ namespace WordLearner {
 		std::ifstream dataFile(dataFilepath);
 		if (!dataFile.is_open())
 		{
-			std::cout << "ERROR (Database): Could not open separators data file.\n";
+			WL_LOG_ERRORF("Could not open separators data file.");
 			return;
 		}
 		// Read separators from data file.
@@ -193,13 +196,13 @@ namespace WordLearner {
 		dataFile >> m_separators;
 		if (m_separators.empty())
 		{
-			std::cout << "ERROR (Database): Missing separators in data file.\n";
+			WL_LOG_ERRORF("Missing separators in data file.");
 		}
 		// Close data file stream
 		dataFile.close();
 		if (dataFile.is_open())
 		{
-			std::cout << "ERROR (Database): Could not close separators data file.\n";
+			WL_LOG_ERRORF("Could not close separators data file.");
 		}
 	}
 
@@ -220,25 +223,25 @@ namespace WordLearner {
 			}
 			catch (...)
 			{
-				std::cout << "ERROR (Database): Word on line " << lineIdx << " has an invalid ID.\n";
+				WL_LOG_ERRORF("Word on line " << lineIdx << " has an invalid ID.");
 				return false;
 			}
 		}
 		else
 		{
-			std::cout << "ERROR (Database): Word on line " << lineIdx << " is empty.\n";
+			WL_LOG_ERRORF("Word on line " << lineIdx << " is empty.");
 			return false;
 		}
 		// - Read word's term A
 		if (!std::getline(declStream, word.termA, m_separators[0]))
 		{
-			std::cout << "ERROR (Database): Word on line " << lineIdx << " is missing its second propery - term A.\n";
+			WL_LOG_ERRORF("Word on line " << lineIdx << " is missing its second propery - term A.");
 			return false;
 		}
 		// - Read word's term B
 		if (!std::getline(declStream, word.termB, m_separators[0]))
 		{
-			std::cout << "ERROR (Database): Word on line " << lineIdx << " is missing its third propery - term B.\n";
+			WL_LOG_ERRORF("Word on line " << lineIdx << " is missing its third propery - term B.");
 			return false;
 		}
 		// - Read word's note
@@ -264,26 +267,26 @@ namespace WordLearner {
 			}
 			catch (...)
 			{
-				std::cout << "ERROR (Database): Word set on line " << lineIdx << " has an invalid ID.\n";
+				WL_LOG_ERRORF("Word set on line " << lineIdx << " has an invalid ID.");
 				return false;
 			}
 		}
 		else
 		{
-			std::cout << "ERROR (Database): Word set on line " << lineIdx << " is empty.\n";
+			WL_LOG_ERRORF("Word set on line " << lineIdx << " is empty.");
 			return false;
 		}
 		// - Read word set's name
 		if (!std::getline(declStream, wordSet.name, m_separators[0]))
 		{
-			std::cout << "ERROR (Database): Word set on line " << lineIdx << " is missing its second propery - name.\n";
+			WL_LOG_ERRORF("Word set on line " << lineIdx << " is missing its second propery - name.");
 			return false;
 		}
 		// Read word set's list of words
 		std::getline(declStream, propertyStr, m_separators[0]);
 		if (!parseListOfInt(propertyStr, wordSet.words))
 		{
-			std::cout << "ERROR (Database): Word set on line " << lineIdx << " has an invalid list of words.\n";
+			WL_LOG_ERRORF("Word set on line " << lineIdx << " has an invalid list of words.");
 			return false;
 		}
 		// At this point we successfully read all the properties
@@ -348,16 +351,20 @@ namespace WordLearner {
 	{
 		for (const Word& word : m_words)
 		{
-			std::cout << serializeWord(word) << "\n";
+			WL_LOG_INFOF(serializeWord(word));
 		}
+		WL_LOG_INFOF("");
 	}
 
 	void Database::printWordSets() const
 	{
 		for (const WordSet& wordSet : m_wordSets)
 		{
-			std::cout << serializeWordSet(wordSet) << "\n";
+			WL_LOG_INFOF(serializeWordSet(wordSet));
 		}
+		WL_LOG_INFOF("");
 	}
 
 } // namespace WordLearner
+
+#undef WL_FILENAME
