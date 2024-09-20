@@ -38,6 +38,15 @@ namespace WordLearner {
 		// TODO: comment
 		std::string serializeListInt(const std::vector<int>& list) const;
 
+		// Finds word with a given ID in database
+		// @param[in] id - ID of the word to find
+		// @return Pointer to the found word. Nullptr if word is not found.
+		const Word* findWord(int id) const;
+		// Finds word set with a given ID in database
+		// @param[in] id - ID of the word set to find
+		// @return Pointer to the found word set. Nullptr if word set is not found.
+		const WordSet* findWordSet(int id) const;
+
 		// TODO: comment
 		void printWords() const;
 		// TODO: comment

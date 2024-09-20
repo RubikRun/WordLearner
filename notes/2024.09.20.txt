@@ -42,3 +42,7 @@ for enabling/disabling logging of the different types of messages.
 Now let's include Logger.hpp in Database.cpp
     #include "Logger.hpp"
 and replace all calls to std::cout with a macro from Logger.hpp
+
+------------------------------------------------------
+
+Let's do one more thing - check for uniqueness of IDs when loading words and word sets.

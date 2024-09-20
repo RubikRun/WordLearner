@@ -7,8 +7,8 @@ instead of adding them one by one and having our memory grow dynamically.
 Not that it matters much, our .data files will probably contain at most 10k objects, but still.
 Of course, separators.data is a special case, we don't need to have the number of objects there.
 
-TODO: When loading words check for uniqueness of IDs
-TODO: When loading word sets check for uniqueness of IDs
+DONE: When loading words check for uniqueness of IDs
+DONE: When loading word sets check for uniqueness of IDs
 TODO: When loading word sets check if words list contains existing IDs
 
 I also added functions

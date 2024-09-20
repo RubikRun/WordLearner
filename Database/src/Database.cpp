@@ -63,20 +63,23 @@ namespace WordLearner {
 		int lineIdx = 1;
 		while (std::getline(dataFile, line))
 		{
+			lineIdx++;
 			// Parse word from line
 			Word word;
-			if (parseWord(line, lineIdx, word))
-			{
-				// Add word to database's list of words
-				m_words.push_back(word);
-				// Count number of processed words
-				wordsProcessed++;
-			}
-			else
+			if (!parseWord(line, lineIdx, word))
 			{
 				WL_LOG_ERRORF("Invalid word on line " << lineIdx << ".");
+				continue;
 			}
-			lineIdx++;
+			// Check if word's ID is unique
+			if (findWord(word.id) != nullptr)
+			{
+				WL_LOG_ERRORF("Word on line " << lineIdx << " has a duplicate ID with an already existing word.");
+				continue;
+			}
+			// Add word to database's list of words
+			m_words.push_back(word);
+			wordsProcessed++;
 		}
 		// Log info about loaded words
 		WL_LOG_INFOF("Successfully loaded " << wordsProcessed << " words.");
@@ -87,7 +90,7 @@ namespace WordLearner {
 		// Check if the words we processed are as many as the file says
 		if (wordsCount != -1 && wordsProcessed != wordsCount)
 		{
-			WL_LOG_WARNINGF("Words in data file are not as many as the first line says.");
+			WL_LOG_WARNINGF("Loaded words from data file are not as many as the first line says.");
 		}
 		// Close data file stream
 		dataFile.close();
@@ -147,20 +150,23 @@ namespace WordLearner {
 		int lineIdx = 1;
 		while (std::getline(dataFile, line))
 		{
+			lineIdx++;
 			// Parse word set from line
 			WordSet wordSet;
-			if (parseWordSet(line, lineIdx, wordSet))
-			{
-				// Add word set to database's list of word sets
-				m_wordSets.push_back(wordSet);
-				// Count number of processed word sets
-				wordSetsProcessed++;
-			}
-			else
+			if (!parseWordSet(line, lineIdx, wordSet))
 			{
 				WL_LOG_ERRORF("Invalid word set on line " << lineIdx << ".");
+				continue;
 			}
-			lineIdx++;
+			// Check if word set's ID is unique
+			if (findWordSet(wordSet.id) != nullptr)
+			{
+				WL_LOG_ERRORF("Word set on line " << lineIdx << " has a duplicate ID with an already existing word set.");
+				continue;
+			}
+			// Add word set to database's list of word sets
+			m_wordSets.push_back(wordSet);
+			wordSetsProcessed++;
 		}
 		// Log info about loaded word sets
 		WL_LOG_INFOF("Successfully loaded " << wordSetsProcessed << " word sets.");
@@ -171,7 +177,7 @@ namespace WordLearner {
 		// Check if the word sets we processed are as many as the file says
 		if (wordSetsCount != -1 && wordSetsProcessed != wordSetsCount)
 		{
-			WL_LOG_WARNINGF("Word sets in data file are not as many as the first line says.");
+			WL_LOG_WARNINGF("Loaded word sets from data file are not as many as the first line says.");
 		}
 		// Close data file stream
 		dataFile.close();
@@ -345,6 +351,30 @@ namespace WordLearner {
 			lStream << sep << elem;
 		}
 		return lStream.str();
+	}
+
+	const Word* Database::findWord(int id) const
+	{
+		for (const Word& word : m_words)
+		{
+			if (word.id == id)
+			{
+				return &word;
+			}
+		}
+		return nullptr;
+	}
+
+	const WordSet* Database::findWordSet(int id) const
+	{
+		for (const WordSet& wordSet : m_wordSets)
+		{
+			if (wordSet.id == id)
+			{
+				return &wordSet;
+			}
+		}
+		return nullptr;
 	}
 
 	void Database::printWords() const
