@@ -140,7 +140,7 @@ namespace WordLearner {
 			return;
 		}
 		// Allocate memory for that many word sets
-		m_words.clear();
+		m_wordSets.clear();
 		if (wordSetsCount != -1)
 		{
 			m_wordSets.reserve(wordSetsCount);
