@@ -29,14 +29,14 @@ namespace WordLearner {
 		bool parseWordSet(const std::string& decl, int lineIdx, WordSet& wordSet) const;
 
 		// TODO: comment
-		bool parseListOfInt(const std::string& decl, std::vector<int>& list) const;
+		bool parseIntList(const std::string& decl, std::vector<int>& list) const;
 
 		// TODO: comment
 		std::string serializeWord(const Word& word) const;
 		// TODO: comment
 		std::string serializeWordSet(const WordSet& wordSet) const;
 		// TODO: comment
-		std::string serializeListInt(const std::vector<int>& list) const;
+		std::string serializeIntList(const std::vector<int>& list) const;
 
 		// Finds word with a given ID in database
 		// @param[in] id - ID of the word to find

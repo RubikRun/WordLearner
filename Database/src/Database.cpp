@@ -290,7 +290,7 @@ namespace WordLearner {
 		}
 		// Read word set's list of words
 		std::getline(declStream, propertyStr, m_separators[0]);
-		if (!parseListOfInt(propertyStr, wordSet.words))
+		if (!parseIntList(propertyStr, wordSet.words))
 		{
 			WL_LOG_ERRORF("Word set on line " << lineIdx << " has an invalid list of words.");
 			return false;
@@ -308,14 +308,39 @@ namespace WordLearner {
 		return true;
 	}
 
-	bool Database::parseListOfInt(const std::string& decl, std::vector<int>& list) const
+	bool Database::parseIntList(const std::string& decl, std::vector<int>& list) const
 	{
 		list.clear();
 		// Create a string stream containing the declaration string.
 		std::stringstream declStream(decl);
-		// Read list's elements one by one
-		// by separating the declaration string with our second separator
+		// Read first element from list by separating the declaration string with our second separator.
+		// First element in list is the number of elements (not counting itself)
 		std::string elemStr;
+		int elemCount = -1;
+		if (std::getline(declStream, elemStr, m_separators[1]))
+		{
+			// Parse element string into an integer
+			try
+			{
+				elemCount = std::stoi(elemStr);
+			}
+			catch (...)
+			{
+				return false;
+			}
+		}
+		// Allocate memory for that many elements
+		list.clear();
+		if (elemCount > -1)
+		{
+			list.reserve(elemCount);
+		}
+		else
+		{
+			WL_LOG_WARNINGF("Invalid number of elements provided in the beginning of a list of integers, should be >= 0.");
+		}
+		// Read list's elements one by one (actual elements, after the first element which is the count)
+		// by separating the declaration string with our second separator
 		while (std::getline(declStream, elemStr, m_separators[1]))
 		{
 			// Parse element string into an integer
@@ -331,6 +356,11 @@ namespace WordLearner {
 			// Add integer element to list
 			list.push_back(elem);
 		}
+		// Check if processed elements are as many as the count written in list's beginning.
+		if (list.size() != elemCount)
+		{
+			WL_LOG_WARNINGF("Elements in a list of integers are NOT as many as the count in list's beginning.");
+		}
 		// At this point we have successfully gone through all elements, parsed them and added them to list
 		return true;
 	}
@@ -344,17 +374,18 @@ namespace WordLearner {
 	std::string Database::serializeWordSet(const WordSet& wordSet) const
 	{
 		const char& sep = m_separators[0];
-		return std::to_string(wordSet.id) + sep + wordSet.name + sep + serializeListInt(wordSet.words);
+		return std::to_string(wordSet.id) + sep + wordSet.name + sep + serializeIntList(wordSet.words);
 	}
 
-	std::string Database::serializeListInt(const std::vector<int>& list) const
+	std::string Database::serializeIntList(const std::vector<int>& list) const
 	{
 		if (list.empty())
 		{
 			return std::string();
 		}
 		const char& sep = m_separators[1];
-		std::stringstream lStream(std::to_string(list[0]));
+		std::stringstream lStream;
+		lStream << list.size();
 		for (int elem : list)
 		{
 			lStream << sep << elem;

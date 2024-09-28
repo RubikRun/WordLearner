@@ -16,4 +16,4 @@ I also added functions
     printWordSet()
 for printing all loaded words and word sets to the console
 
-TODO: In Database in parseListInt() make the first written thing be the number of elements so that we can allocate memory more effeciently.
+DONE: In Database in parseListOfInt() make the first written thing be the number of elements so that we can allocate memory more effeciently.

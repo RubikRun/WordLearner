@@ -1,0 +1,17 @@
+Today let's do this old TO-DO:
+    TO-DO: In Database in parseListOfInt() make the first written thing be the number of elements so that we can allocate memory more effeciently.
+
+First of all, let's rename parseListOfInt() to be parseIntList(), sounds better.
+Now let's just implement it, kinda straightforward.
+Only thing to think about is what to do if the count is invalid.
+I did it with 2 separate checks.
+First, count could be < 0, in this case I just don't allocate memory in the beginning,
+and I let vector allocate its memory dynamically as it grows.
+Second, count could be >= 0 and we will allocate that much memory, but the actual elements might be more/less.
+We can't really do anything in this case, just in the end check if the resulting list
+has as many elements as the count, and if it doesn't log a warning.
+It's not really a problem, everything will still work perfectly fine,
+just a sanity check and a bit of optimization.
+
+(later, came back, 2024.09.30) I forgot to implement this in serializeListInt(),
+and rename it to serializeIntList()
