@@ -13,7 +13,7 @@ namespace WordLearner {
 
 	void Database::load()
 	{
-		loadSeparators("Database/data/separators.data");
+		loadSeparators();
 		loadWords("Database/data/words.data");
 		loadWordSets("Database/data/word_sets.data");
 	}
@@ -187,10 +187,10 @@ namespace WordLearner {
 		}
 	}
 
-	void Database::loadSeparators(const std::string& dataFilepath)
+	void Database::loadSeparators()
 	{
 		// Open data file with an input stream
-		std::ifstream dataFile(dataFilepath);
+		std::ifstream dataFile("Database/data/separators.data");
 		if (!dataFile.is_open())
 		{
 			WL_LOG_ERRORF("Could not open separators data file.");

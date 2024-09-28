@@ -19,3 +19,20 @@ and rename it to serializeIntList()
 Now I'll finally comment the functions in Database.h
 because they are kinda finished/complete now.
 Only thing left to do in Database for now is exporting.
+
+And I noticed that the function
+    loadSeparators()
+is not really supposed to take dataFilepath as argument.
+The separators will always be in the same filepath and only Database is responsible for knowing that path.
+That's different from loading words and word sets in
+    loadWords()
+    loadWordSets()
+There it makes sense to take dataFilepath as argument, because these could be callable by other code in the future.
+For now they are private and we call it only in database with hardcoded filepaths
+because we know where the data files for words and word sets are,
+but in the future we will probably have multiple such files
+and they will probably be per user,
+so it makes sense that outer code will have to call loadWords() and loadWordSets()
+to load the specific words and word sets that are needed now.
+On the other hand, the separators are not really supposed to change
+and they are only Database's business.

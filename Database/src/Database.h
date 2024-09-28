@@ -20,8 +20,8 @@ namespace WordLearner {
 		void loadWords(const std::string& dataFilepath);
 		// Loads word sets from a given .data file
 		void loadWordSets(const std::string& dataFilepath);
-		// Loads database's separators from a given .data file
-		void loadSeparators(const std::string& dataFilepath);
+		// Loads database's separators from their .data file
+		void loadSeparators();
 
 		// Parses a word from a declaration line from a .data file.
 		// Returns true on success.
