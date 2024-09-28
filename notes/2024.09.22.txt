@@ -1,0 +1,30 @@
+Today let's start with this old TO-DO:
+    TO-DO: When loading word sets check if words list contains existing IDs
+
+Meanwhile I noticed a bug from a typo.
+In loadWordSets() before pushing word sets to m_wordSets I clear m_wordSets but what I actually had written was this
+    m_words.clear();
+So it cleared the words instead of the word sets.
+Fixed now.
+
+Meanwhile I noticed another bug, this time in the loggin system, in
+    Logger.hpp
+In case we have WL_LOGGER_ENABLED_ERROR disabled we don't define WL_LOG_ERRORF at all,
+and we should define it to be nothing
+    #define WL_LOG_ERRORF(MSG)
+Otherwise it's a build error.
+I went back to fix it in the commit that creates the logging system.
+
+And now finally let's check if word sets are made up of existing words, when loading them in Database.cpp
+I think a good place for this check is in
+    parseWordSet()
+and we can just check the words from
+    wordSet.words
+one by one with a for-loop and use
+    findWord()
+to see if word exists in database.
+If a single word doesn't exist we will disregard the whole word set, log an error message, and just return false.
+Another reasonable thing to do might be to just skip the missing words and still construct the word set
+with only the valid words, but I think it's better to disregard the whole word set,
+because clearly something is wrong.
+Database will export and load itself automatically, no user error should lead to a word set with non-existing words.

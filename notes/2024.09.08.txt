@@ -9,7 +9,7 @@ Of course, separators.data is a special case, we don't need to have the number o
 
 DONE: When loading words check for uniqueness of IDs
 DONE: When loading word sets check for uniqueness of IDs
-TODO: When loading word sets check if words list contains existing IDs
+DONE: When loading word sets check if words list contains existing IDs
 
 I also added functions
     printWords()

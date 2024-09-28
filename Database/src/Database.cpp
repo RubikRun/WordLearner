@@ -295,6 +295,15 @@ namespace WordLearner {
 			WL_LOG_ERRORF("Word set on line " << lineIdx << " has an invalid list of words.");
 			return false;
 		}
+		// Check if each ID in the list is an ID of an existing word
+		for (int id : wordSet.words)
+		{
+			if (findWord(id) == nullptr)
+			{
+				WL_LOG_ERRORF("Word set on line " << lineIdx << " references a non-existing word.");
+				return false;
+			}
+		}
 		// At this point we successfully read all the properties
 		return true;
 	}
