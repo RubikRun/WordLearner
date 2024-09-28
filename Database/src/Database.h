@@ -12,30 +12,33 @@ namespace WordLearner {
 	class Database
 	{
 	public:
-		// TODO: comment
+		// Loads the entire database from its .data files
 		void load();
 
 	private: /* functions */
-		// TODO: comment
+		// Loads words from a given .data file
 		void loadWords(const std::string& dataFilepath);
-		// TODO: comment
+		// Loads word sets from a given .data file
 		void loadWordSets(const std::string& dataFilepath);
-		// TODO: comment
+		// Loads database's separators from a given .data file
 		void loadSeparators(const std::string& dataFilepath);
 
-		// TODO: comment
+		// Parses a word from a declaration line from a .data file.
+		// Returns true on success.
 		bool parseWord(const std::string& decl, int lineIdx, Word& word) const;
-		// TODO: comment
+		// Parses a word set from a declaration line from a .data file.
+		// Returns true on success.
 		bool parseWordSet(const std::string& decl, int lineIdx, WordSet& wordSet) const;
 
-		// TODO: comment
+		// Parses a list of integers from a declaration from a .data file.
+		// Returns true on success.
 		bool parseIntList(const std::string& decl, std::vector<int>& list) const;
 
-		// TODO: comment
+		// Serializes a given word into a declaration line for a .data file
 		std::string serializeWord(const Word& word) const;
-		// TODO: comment
+		// Serializes a given word set into a declaration line for a .data file
 		std::string serializeWordSet(const WordSet& wordSet) const;
-		// TODO: comment
+		// Serializes a given list of integers into a declaration string for a .data file
 		std::string serializeIntList(const std::vector<int>& list) const;
 
 		// Finds word with a given ID in database
@@ -47,9 +50,9 @@ namespace WordLearner {
 		// @return Pointer to the found word set. Nullptr if word set is not found.
 		const WordSet* findWordSet(int id) const;
 
-		// TODO: comment
+		// Prints all loaded words to the console
 		void printWords() const;
-		// TODO: comment
+		// Prints all loaded word sets to the console
 		void printWordSets() const;
 
 	private: /* variables */

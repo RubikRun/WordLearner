@@ -15,3 +15,7 @@ just a sanity check and a bit of optimization.
 
 (later, came back, 2024.09.30) I forgot to implement this in serializeListInt(),
 and rename it to serializeIntList()
+
+Now I'll finally comment the functions in Database.h
+because they are kinda finished/complete now.
+Only thing left to do in Database for now is exporting.
