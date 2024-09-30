@@ -1,0 +1,49 @@
+To sum up what I have so far:
+An application that opens an empty UI window and loads database from .data files.
+Database consists of a list of words and a list of word sets, for now.
+
+What I have to do now is to implement exporting
+of the 2 lists back to .data files.
+
+I already have functions
+    std::string serializeWord(const Word& word) const;
+    std::string serializeWordSet(const WordSet& wordSet) const;
+for serializing a single word and a single word set.
+I use them for logging the loaded words and word sets to the console.
+These functions do not serialize the objects in some user-oriented way,
+they serialize them in the exact same way that they should be in their .data files.
+So we can directly use them.
+
+In Database I created a function
+    void exportWords(const std::string& dataFilepath);
+that just opens the data file, and writes to it each word serialized.
+Then I created this function
+    void export()
+same as
+    void load()
+that just exports the entire database by calling exportWords(), exportWordSets(), etc. with the appropriate paths to data files.
+However, "export" is a C++ keyword so I cannot name my function just "export"
+so let's make it be
+    exportDatabase()
+and make load() be
+    loadDatabase()
+
+Now let's run it and see if
+    exportWords()
+works fine.
+It works, but I just missed to write the number of words as first thing in the data file.
+Now it works 100%.
+
+Okay let's implement the same for word sets. A new function
+    void exportWords(const std::string& dataFilepath);
+Easy.
+But now I see that the exported data file is different from the original.
+Specifically the word list is serialized without first writing the number of objects.
+This is a mistake, something that I have forgotten to do in this older commit:
+    commit 9a88f5177f7a16f2f72c774e729c50ed17b7392f
+    Author: Boris Dimitrov <borisd2000@gmail.com>
+    Date:   Sat Sep 28 18:33:09 2024 +0200
+        In Database make lists contain their count as a first element
+So now I will stash my current changes and go back to fix that commit.
+Done.
+Now it works perfectly.

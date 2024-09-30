@@ -11,11 +11,17 @@ static bool DO_DEBUG_DATABASE = true;
 
 namespace WordLearner {
 
-	void Database::load()
+	void Database::loadDatabase()
 	{
 		loadSeparators();
 		loadWords("Database/data/words.data");
 		loadWordSets("Database/data/word_sets.data");
+	}
+
+	void Database::exportDatabase()
+	{
+		exportWords("Database/data/words.data");
+		exportWordSets("Database/data/word_sets.data");
 	}
 
 	void Database::loadWords(const std::string& dataFilepath)
@@ -29,7 +35,7 @@ namespace WordLearner {
 		std::ifstream dataFile(dataFilepath);
 		if (!dataFile.is_open())
 		{
-			WL_LOG_ERRORF("Cannot open words data file.");
+			WL_LOG_ERRORF("Cannot open words data file for load.");
 			return;
 		}
 		// Read first line which is the number of words in the file
@@ -96,7 +102,7 @@ namespace WordLearner {
 		dataFile.close();
 		if (dataFile.is_open())
 		{
-			WL_LOG_ERRORF("Cannot close words data file.");
+			WL_LOG_ERRORF("Cannot close words data file after load.");
 		}
 	}
 
@@ -116,7 +122,7 @@ namespace WordLearner {
 		std::ifstream dataFile(dataFilepath);
 		if (!dataFile.is_open())
 		{
-			WL_LOG_ERRORF("Cannot open word sets data file.");
+			WL_LOG_ERRORF("Cannot open word sets data file for load.");
 			return;
 		}
 		// Read first line which is the number of word sets in the file
@@ -183,7 +189,7 @@ namespace WordLearner {
 		dataFile.close();
 		if (dataFile.is_open())
 		{
-			WL_LOG_ERRORF("Cannot close word sets data file.");
+			WL_LOG_ERRORF("Cannot close word sets data file after load.");
 		}
 	}
 
@@ -193,7 +199,7 @@ namespace WordLearner {
 		std::ifstream dataFile("Database/data/separators.data");
 		if (!dataFile.is_open())
 		{
-			WL_LOG_ERRORF("Could not open separators data file.");
+			WL_LOG_ERRORF("Cannot open separators data file for load.");
 			return;
 		}
 		// Read separators from data file.
@@ -208,7 +214,7 @@ namespace WordLearner {
 		dataFile.close();
 		if (dataFile.is_open())
 		{
-			WL_LOG_ERRORF("Could not close separators data file.");
+			WL_LOG_ERRORF("Cannot close separators data file after load.");
 		}
 	}
 
@@ -363,6 +369,56 @@ namespace WordLearner {
 		}
 		// At this point we have successfully gone through all elements, parsed them and added them to list
 		return true;
+	}
+
+	void Database::exportWords(const std::string& dataFilepath)
+	{
+		// Open data file with an output stream
+		std::ofstream dataFile(dataFilepath);
+		if (!dataFile.is_open())
+		{
+			WL_LOG_ERRORF("Cannot open words data file for export.");
+			return;
+		}
+		// Write the number of words to the file
+		dataFile << m_words.size() << "\n";
+		// Serialize each word and write it to the file
+		for (const Word& word : m_words)
+		{
+			const std::string wordSerialized = serializeWord(word);
+			dataFile << wordSerialized << "\n";
+		}
+		// Close data file stream
+		dataFile.close();
+		if (dataFile.is_open())
+		{
+			WL_LOG_ERRORF("Cannot close words data file after export.");
+		}
+	}
+
+	void Database::exportWordSets(const std::string& dataFilepath)
+	{
+		// Open data file with an output stream
+		std::ofstream dataFile(dataFilepath);
+		if (!dataFile.is_open())
+		{
+			WL_LOG_ERRORF("Cannot open word sets data file for export.");
+			return;
+		}
+		// Write the number of word sets to the file
+		dataFile << m_wordSets.size() << "\n";
+		// Serialize each word set and write it to the file
+		for (const WordSet& wordSet: m_wordSets)
+		{
+			const std::string wordSetSerialized = serializeWordSet(wordSet);
+			dataFile << wordSetSerialized << "\n";
+		}
+		// Close data file stream
+		dataFile.close();
+		if (dataFile.is_open())
+		{
+			WL_LOG_ERRORF("Cannot close word sets data file after export.");
+		}
 	}
 
 	std::string Database::serializeWord(const Word& word) const

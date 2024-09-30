@@ -13,7 +13,9 @@ namespace WordLearner {
 	{
 	public:
 		// Loads the entire database from its .data files
-		void load();
+		void loadDatabase();
+		// Exports the entire database to its .data files
+		void exportDatabase();
 
 	private: /* functions */
 		// Loads words from a given .data file
@@ -33,6 +35,11 @@ namespace WordLearner {
 		// Parses a list of integers from a declaration from a .data file.
 		// Returns true on success.
 		bool parseIntList(const std::string& decl, std::vector<int>& list) const;
+
+		// Exports words to a given .data file
+		void exportWords(const std::string& dataFilepath);
+		// Exports word sets to a given .data file
+		void exportWordSets(const std::string& dataFilepath);
 
 		// Serializes a given word into a declaration line for a .data file
 		std::string serializeWord(const Word& word) const;
