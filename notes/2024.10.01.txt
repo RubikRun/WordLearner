@@ -1,0 +1,35 @@
+Last time I finished Database. It's ready for version 0.1.
+
+Today I will start working on UI.
+For now I only have an empty main window.
+
+Let's begin by creating a single list widget that contains all words.
+First of all, I removed the .ui file. I will not be using Qt Designer. I will create my UI elements in code.
+Then I tried creating a QListWidget and a QHBoxLayout
+    QHBoxLayout* layout = nullptr;
+    QListWidget* wordsListWidget = nullptr;
+and setting main window's layout like that
+    setLayout(layout)
+but it doesn't work. It gives me this error when I run it
+    QWidget::setLayout: Attempting to set QLayout "" on WordLearner::WordLearnerMainWindow "", which already has a layout
+Quick googling tells me that I can't directly set a layout to a main window.
+Instead I should have a central widget of the main window and set layout to that central widget.
+Fortunately I do NOT have to have a whole separate member for the central widget like that
+    QWidget* centralWidget = nullptr
+Instead QMainWindow already has such a member and I can access it with
+    centralWidget()
+    setCentralWidget()
+So I think it's appropriate to do
+    setCentralWidget(new QWidget);
+    ...
+    centralWidget()->setLayout(ui.layout);
+Then I created a function
+    void createWordsListWidget()
+in WordLearnerMainWindow for creating the list widget and filling it with the words from database.
+I also had to create a getter for the words list in Database class
+    const std::vector<Word>& getWords() const
+and for consistency let's create the same getter for the list of word sets. I will need it later.
+    const std::vector<WordSet>& getWordSets() const
+Then in createWordsListWidget() I can just create the QListWidget normally and fill it with the words from database.
+Done, it works.
+Looks a bit bad tho, let's style it better next time.

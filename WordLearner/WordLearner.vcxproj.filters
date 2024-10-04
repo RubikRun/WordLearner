@@ -35,9 +35,4 @@
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="src\QtResources\WordLearnerMainWindow.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-  </ItemGroup>
 </Project>

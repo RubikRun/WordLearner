@@ -17,6 +17,17 @@ namespace WordLearner {
 		// Exports the entire database to its .data files
 		void exportDatabase();
 
+		// Returns list of currently loaded words
+		const std::vector<Word>& getWords() const
+		{
+			return m_words;
+		}
+		// Returns list of currently loaded word sets
+		const std::vector<WordSet>& getWordSets() const
+		{
+			return m_wordSets;
+		}
+
 	private: /* functions */
 		// Loads words from a given .data file
 		void loadWords(const std::string& dataFilepath);

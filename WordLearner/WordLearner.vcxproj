@@ -17,9 +17,6 @@
   <ItemGroup>
     <QtMoc Include="src\WordLearnerMainWindow.h" />
   </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="src\QtResources\WordLearnerMainWindow.ui" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E08442B5-8338-4981-8216-7AC1C2451798}</ProjectGuid>
     <Keyword>QtVS_v304</Keyword>
