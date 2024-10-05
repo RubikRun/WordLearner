@@ -3,3 +3,8 @@ with a function for loading all resources,
 for now only a CSS file for list widgets.
 Let's finish that and then finish styling the actual list widget.
 Done, list widget looks better, still not final but good for now.
+
+Now let's add another list widget for the word sets.
+It should be horizontally next to the words list, to the left of it.
+For now let's just show the data sets from database.
+Done, pretty easy, and it looks good.

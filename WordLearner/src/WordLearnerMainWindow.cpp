@@ -23,8 +23,30 @@ void WordLearner::WordLearnerMainWindow::createUi()
     // Create layout
     ui.layout = new QHBoxLayout;
     centralWidget()->setLayout(ui.layout);
-    // Create list widget
+    // Create list widgets for words and word sets
+    createWordSetsListWidget();
     createWordsListWidget();
+}
+
+void WordLearner::WordLearnerMainWindow::createWordSetsListWidget()
+{
+    // Create list widget
+    ui.wordSetsListWidget = new QListWidget;
+    ui.wordSetsListWidget->setStyleSheet(ResourceManager::getListWidgetStylesheet().c_str());
+
+    ui.layout->addWidget(ui.wordSetsListWidget);
+    // Retrieve word sets list from database
+    const std::vector<WordSet>& wordSets = database.getWordSets();
+    // Create a list of string items, one for each word set
+    QStringList items(wordSets.size());
+    for (int i = 0; i < wordSets.size(); ++i)
+    {
+        const WordSet& wordSet = wordSets[i];
+        const std::string wordSetView = wordSet.name;
+        items[i] = QString(wordSetView.c_str());
+    }
+    // Add items to list widget
+    ui.wordSetsListWidget->addItems(items);
 }
 
 void WordLearner::WordLearnerMainWindow::createWordsListWidget()

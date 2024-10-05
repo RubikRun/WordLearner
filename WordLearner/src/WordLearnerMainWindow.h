@@ -24,6 +24,8 @@ namespace WordLearner
         // Creates all UI elements of window
         void createUi();
 
+        // Creates word sets list widget and fills it with word sets from database
+        void createWordSetsListWidget();
         // Creates words list widget and fills it with words from database
         void createWordsListWidget();
 
@@ -34,6 +36,8 @@ namespace WordLearner
         {
             // Window's primary layout
             QHBoxLayout* layout = nullptr;
+            // List widget for showing a list of word sets
+            QListWidget* wordSetsListWidget = nullptr;
             // List widget for showing a list of words
             QListWidget* wordsListWidget = nullptr;
         } ui;
