@@ -1,5 +1,7 @@
 #include "WordLearnerMainWindow.h"
 
+#include "ResourceManager.h"
+
 using namespace WordLearner;
 
 WordLearnerMainWindow::WordLearnerMainWindow(const Database& database, QWidget *parent)
@@ -29,6 +31,8 @@ void WordLearner::WordLearnerMainWindow::createWordsListWidget()
 {
     // Create list widget
     ui.wordsListWidget = new QListWidget;
+    ui.wordsListWidget->setStyleSheet(ResourceManager::getListWidgetStylesheet().c_str());
+
     ui.layout->addWidget(ui.wordsListWidget);
     // Retrieve words list from database
     const std::vector<Word>& words = database.getWords();

@@ -1,0 +1,5 @@
+Yesterday I started to write a ResourceManager namespace
+with a function for loading all resources,
+for now only a CSS file for list widgets.
+Let's finish that and then finish styling the actual list widget.
+Done, list widget looks better, still not final but good for now.

@@ -1,0 +1,26 @@
+Today I want to style the list widget better.
+First I tried applying another style globally.
+I want the classic Windows style.
+Chat GPT told me that I can set the style of the whole application like that
+    app.setStyle(QStyleFactory::create("Windows"));
+and that I can check available styles on my platform with this
+    qDebug() << "Available styles:" << QStyleFactory::keys();
+but setting the style doesn't work although QStyleFactory::keys() does contain "Windows".
+I couldn't find out why, but I decided to style it myself with stylesheets.
+This is some example stylesheet that I managed to create for my list widget
+    ui.wordsListWidget->setStyleSheet("QListWidget { font-size: 20px; } QListWidget::item { border: 1px solid #dddddd; }");
+but now I want to have CSS files separately, not hardcode it like that,
+and for that I will need a resource manager.
+So I started writing a class
+    ResourceManager
+but then I decided it doesn't need to be a class because it will have to be a singleton
+which is not really needed in C++, I can just make a bunch of global functions in
+    namespace ResourceManager
+and in the .cpp file have a bunch of static global variables that will be visible only to that .cpp
+So yeah, I need a function
+    const std::string& getListWidgetStylesheet();
+that returns the list widget stylesheet as a string and it will be read from a CSS file under
+    WordLearner/resources/
+that will be loaded by this other function in ResourceManager
+    void load()
+that will just load all resources into their corresponding static global variables in the .cpp

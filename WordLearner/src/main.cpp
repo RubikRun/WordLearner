@@ -1,18 +1,26 @@
 #include <windows.h>
 
 #include "WordLearnerMainWindow.h"
+#include "Database.h"
+#include "ResourceManager.h"
+
 #include <QtWidgets/QApplication>
 
-#include "Database.h"
 
-using WordLearner::Database;
-using WordLearner::WordLearnerMainWindow;
+using namespace WordLearner;
 
-int main(int argc, char *argv[])
+static void setup()
 {
     // Set console's output code page to UTF-8
     // so that it can write cyrillic characters
     SetConsoleOutputCP(CP_UTF8);
+    // Load global resources
+    ResourceManager::load();
+}
+
+int main(int argc, char *argv[])
+{
+    setup();
     // Load database
     Database database;
     database.loadDatabase();
