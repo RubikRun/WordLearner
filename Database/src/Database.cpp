@@ -24,6 +24,34 @@ namespace WordLearner {
 		exportWordSets("Database/data/word_sets.data");
 	}
 
+	std::vector<Word> Database::getWordsFromWordSet(int wordSetId) const
+	{
+		std::vector<Word> wordsFromWordSet;
+		// Find word set by given ID
+		const WordSet* wordSet = findWordSet(wordSetId);
+		if (wordSet == nullptr)
+		{
+			WL_LOG_ERRORF("Trying to get words of a word set that doesn't exist, with ID = " << wordSetId);
+			return wordsFromWordSet;
+		}
+		// Reserve memory for final words list
+		wordsFromWordSet.reserve(wordSet->words.size());
+		// Traverse word IDs of word set
+		for (int wordId : wordSet->words)
+		{
+			// Find word by ID
+			const Word* word = findWord(wordId);
+			if (word == nullptr)
+			{
+				WL_LOG_ERRORF("Invalid word ID #" << wordId << " in word set #" << wordSetId);
+				continue;
+			}
+			// Add word to final list
+			wordsFromWordSet.push_back(*word);
+		}
+		return wordsFromWordSet;
+	}
+
 	void Database::loadWords(const std::string& dataFilepath)
 	{
 		if (m_separators.empty())

@@ -7,6 +7,8 @@
 
 #include "Database.h"
 
+#include <vector>
+
 namespace WordLearner
 {
 
@@ -15,9 +17,15 @@ namespace WordLearner
         Q_OBJECT
 
     public:
+
         // Creates a WordLearner main window with data from given database
         WordLearnerMainWindow(const Database& database, QWidget* parent = nullptr);
         ~WordLearnerMainWindow();
+
+    private slots:
+
+        // Slot that's called when a new word set is selected in word sets list widget
+        void onWordSetChanged();
 
     private: /* functions */
 
@@ -28,6 +36,9 @@ namespace WordLearner
         void createWordSetsListWidget();
         // Creates words list widget and fills it with words from database
         void createWordsListWidget();
+
+        // Updates words list widget to contain the given list of words. Removes all previously added words.
+        void updateWordsListWidget(const std::vector<Word>& words);
 
     private: /* variables */
 
@@ -41,6 +52,11 @@ namespace WordLearner
             // List widget for showing a list of words
             QListWidget* wordsListWidget = nullptr;
         } ui;
+
+        // List of IDs of words that are currently shown in words list widget
+        std::vector<int> wordsListIds;
+        // List of IDs of word sets that are currently shown in word sets list widget
+        std::vector<int> wordSetsListIds;
 
         const Database& database;
     };

@@ -1,0 +1,20 @@
+Let's continue from last time.
+I was in the middle of implementing
+    onWordSetChanged()
+Now I tested that the retrieved wordSetId is correct.
+So now what to do with that wordSetId?
+Use the new Database API, to get word set's words as Word objects instead of int IDs
+    database.getWordsFromWordSet(wordSetId)
+Now we will need to update words list widget with this new words list.
+We currently do this same logic in createWordsListWidget() but with all words from database.
+So I need to refactor this logic of updating list widget with a new list of words,
+and use it both in createWordsListWidget() and in onWordSetChanged().
+Let's create a new function
+    void updateWordsListWidget(const std::vector<Word>& words)
+that updates the contents of words list widget with a given list of words.
+Use that function in createWordsListWidget().
+And finally use it in onWordSetChanged() to update words list widget with the words from set.
+That's it.
+It works.
+
+TODO: Show global word set

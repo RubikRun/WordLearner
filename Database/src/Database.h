@@ -28,6 +28,11 @@ namespace WordLearner {
 			return m_wordSets;
 		}
 
+		// Returns list of words from a given word set.
+		// @param[in] wordSetId - ID of word set whose words list we want to retrieve
+		// @return List of words contained in the word set.
+		std::vector<Word> getWordsFromWordSet(int wordSetId) const;
+
 	private: /* functions */
 		// Loads words from a given .data file
 		void loadWords(const std::string& dataFilepath);

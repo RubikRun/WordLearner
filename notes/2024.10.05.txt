@@ -8,3 +8,30 @@ Now let's add another list widget for the word sets.
 It should be horizontally next to the words list, to the left of it.
 For now let's just show the data sets from database.
 Done, pretty easy, and it looks good.
+
+Now, the essential part,
+let's connect the two list widgets.
+When user selects a word set from left list,
+right list should update with the words from that selected word set.
+This will require a new functionality in Database,
+that allows us to get list of words from a given word set.
+    std::vector<Word> getWordsFromWordSet(int wordSetId);
+Then in WordLearnerMainWindow I need to connect ui.wordSetsListWidget's itemSelectionChanged() signal to a custom slot
+    void onWordSetChanged()
+Now whenever user selects a new word set this function (slot) will be called.
+Yep, works fine.
+Now I should implement onWordSetChanged().
+First thing to do is to get ID of selected word set.
+How can I do that?
+Currently ui.wordSetsListWidget consists of strings which are the names of word sets.
+I could get the index of selected item and then get the word set with that index from database,
+but that's not good. I don't want to rely on the ordering of things in database.
+Instead we should keep a list of IDs that correspond to the items in the list widget,
+and it's probably a good idea to do the same for words list widget as well.
+    std::vector<int> wordsListIds;
+    std::vector<int> wordSetsListIds;
+These lists should be filled together with items in list widgets.
+Okay, done.
+So now I can start implementing
+    onWordSetChanged()
+I got the word set ID, continue there next time.

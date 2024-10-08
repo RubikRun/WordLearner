@@ -1,6 +1,10 @@
+#define WL_FILENAME "WordLearnerMainWindow.cpp"
+
 #include "WordLearnerMainWindow.h"
 
 #include "ResourceManager.h"
+
+#include "Logger.hpp"
 
 using namespace WordLearner;
 
@@ -15,6 +19,23 @@ WordLearnerMainWindow::WordLearnerMainWindow(const Database& database, QWidget *
 
 WordLearnerMainWindow::~WordLearnerMainWindow()
 {}
+
+void WordLearnerMainWindow::onWordSetChanged()
+{
+    // Get index of selected word set in list
+    const int wordSetIdx = ui.wordSetsListWidget->currentRow();
+    // Get ID of selected word set
+    if (wordSetIdx < 0 || wordSetIdx >= wordSetsListIds.size())
+    {
+        WL_LOG_ERRORF("Cannot get ID of selected word set, index out of range.");
+        return;
+    }
+    const int wordSetId = wordSetsListIds[wordSetIdx];
+    // Get words from selected word set
+    const std::vector<Word> words = database.getWordsFromWordSet(wordSetId);
+    // Update words list widget with words from set
+    updateWordsListWidget(words);
+}
 
 void WordLearner::WordLearnerMainWindow::createUi()
 {
@@ -33,8 +54,9 @@ void WordLearner::WordLearnerMainWindow::createWordSetsListWidget()
     // Create list widget
     ui.wordSetsListWidget = new QListWidget;
     ui.wordSetsListWidget->setStyleSheet(ResourceManager::getListWidgetStylesheet().c_str());
-
     ui.layout->addWidget(ui.wordSetsListWidget);
+    // Connect word sets list widget's itemSelectionChanged() signal to our custom signal onWordSetChanged()
+    connect(ui.wordSetsListWidget, &QListWidget::itemSelectionChanged, this, &WordLearnerMainWindow::onWordSetChanged);
     // Retrieve word sets list from database
     const std::vector<WordSet>& wordSets = database.getWordSets();
     // Create a list of string items, one for each word set
@@ -44,6 +66,8 @@ void WordLearner::WordLearnerMainWindow::createWordSetsListWidget()
         const WordSet& wordSet = wordSets[i];
         const std::string wordSetView = wordSet.name;
         items[i] = QString(wordSetView.c_str());
+        // Add word set ID to word sets IDs list
+        wordSetsListIds.push_back(wordSet.id);
     }
     // Add items to list widget
     ui.wordSetsListWidget->addItems(items);
@@ -54,10 +78,17 @@ void WordLearner::WordLearnerMainWindow::createWordsListWidget()
     // Create list widget
     ui.wordsListWidget = new QListWidget;
     ui.wordsListWidget->setStyleSheet(ResourceManager::getListWidgetStylesheet().c_str());
-
     ui.layout->addWidget(ui.wordsListWidget);
     // Retrieve words list from database
     const std::vector<Word>& words = database.getWords();
+    // Fill list widget with words from database
+    updateWordsListWidget(words);
+}
+
+void WordLearner::WordLearnerMainWindow::updateWordsListWidget(const std::vector<Word>& words)
+{
+    // Remove all previously added words
+    ui.wordsListWidget->clear();
     // Create a list of string items, one for each word
     QStringList items(words.size());
     for (int i = 0; i < words.size(); ++i)
@@ -65,6 +96,8 @@ void WordLearner::WordLearnerMainWindow::createWordsListWidget()
         const Word& word = words[i];
         const std::string wordView = word.termA + "  -  " + word.termB;
         items[i] = QString(wordView.c_str());
+        // Add word ID to words IDs list
+        wordsListIds.push_back(word.id);
     }
     // Add items to list widget
     ui.wordsListWidget->addItems(items);
