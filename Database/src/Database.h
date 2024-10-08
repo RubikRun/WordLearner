@@ -48,6 +48,10 @@ namespace WordLearner {
 		// Returns true on success.
 		bool parseWordSet(const std::string& decl, int lineIdx, WordSet& wordSet) const;
 
+		// Creates a global word set containing all currently loaded words.
+		// Global word set always has an ID=0 and name="global".
+		void createGlobalWordSet(WordSet& wordSet) const;
+
 		// Parses a list of integers from a declaration from a .data file.
 		// Returns true on success.
 		bool parseIntList(const std::string& decl, std::vector<int>& list) const;

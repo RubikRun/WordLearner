@@ -64,7 +64,7 @@ void WordLearner::WordLearnerMainWindow::createWordSetsListWidget()
     for (int i = 0; i < wordSets.size(); ++i)
     {
         const WordSet& wordSet = wordSets[i];
-        const std::string wordSetView = wordSet.name;
+        const std::string wordSetView = (wordSet.id == 0) ? "*" : wordSet.name;
         items[i] = QString(wordSetView.c_str());
         // Add word set ID to word sets IDs list
         wordSetsListIds.push_back(wordSet.id);

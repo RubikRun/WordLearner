@@ -173,11 +173,17 @@ namespace WordLearner {
 			dataFile.close();
 			return;
 		}
-		// Allocate memory for that many word sets
+		// Allocate memory for that many word sets + 1 for the global word set
 		m_wordSets.clear();
 		if (wordSetsCount != -1)
 		{
 			m_wordSets.reserve(wordSetsCount);
+		}
+		// Create global word set and add it to word sets list
+		{
+			WordSet globalWordSet;
+			createGlobalWordSet(globalWordSet);
+			m_wordSets.push_back(globalWordSet);
 		}
 		// Read data file line by line
 		int wordSetsProcessed = 0;
@@ -342,6 +348,19 @@ namespace WordLearner {
 		return true;
 	}
 
+	void Database::createGlobalWordSet(WordSet& wordSet) const
+	{
+		wordSet.id = 0;
+		wordSet.name = "global";
+		// Allocate memory for words, as many as we have loaded
+		wordSet.words.reserve(m_words.size());
+		// Construct list of IDs of loaded words
+		for (const Word& word : m_words)
+		{
+			wordSet.words.push_back(word.id);
+		}
+	}
+
 	bool Database::parseIntList(const std::string& decl, std::vector<int>& list) const
 	{
 		list.clear();
@@ -433,13 +452,25 @@ namespace WordLearner {
 			WL_LOG_ERRORF("Cannot open word sets data file for export.");
 			return;
 		}
-		// Write the number of word sets to the file
-		dataFile << m_wordSets.size() << "\n";
+		// Write number of word sets to the file, -1 because we don't export global word set
+		dataFile << m_wordSets.size() - 1 << "\n";
 		// Serialize each word set and write it to the file
+		int wordSetsExported = 0;
 		for (const WordSet& wordSet: m_wordSets)
 		{
+			// Skip global word set
+			if (wordSet.id == 0)
+			{
+				continue;
+			}
 			const std::string wordSetSerialized = serializeWordSet(wordSet);
 			dataFile << wordSetSerialized << "\n";
+			wordSetsExported++;
+		}
+		// Check if we exported the expected number of word sets
+		if (wordSetsExported != m_wordSets.size() - 1)
+		{
+			WL_LOG_ERRORF("Exported an unexpected number of word sets to data file. Might be because of a missing global word set.");
 		}
 		// Close data file stream
 		dataFile.close();

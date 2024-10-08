@@ -17,4 +17,19 @@ And finally use it in onWordSetChanged() to update words list widget with the wo
 That's it.
 It works.
 
-TODO: Show global word set
+DONE: Show global word set
+
+Let's implement the global word set.
+There are 2 options here.
+1. Global word set will exist in database just as any other word set,
+   but it will be created internally by Database itself, not loaded from file.
+2. Global word set will NOT exist in database, but only shown in UI.
+I think the first approach is better. Second one might be easier for now,
+but first one will solve many annoying issues in the future when it gets more complicated.
+
+So let's create a global set in Database.
+Done.
+I think it will look better in UI if instead of "global" it's written as "*".
+Let's do that.
+Done.
+It works, and looks good.
