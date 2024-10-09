@@ -20,7 +20,7 @@ TODO: Currently word's IDs are unique and word sets IDs are unique
       We want IDs to be unique across all objects.
       Implement a global ID existence check.
 
-BUG: I also noticed a bug.
+DONE: I also noticed a bug.
      The global word set is created internally in Database, it doesn't exist in data file,
      but then we export it to data file at the end. We have to not do that.
      I will go back and fix it in the corresponding commit.

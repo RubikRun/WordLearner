@@ -82,6 +82,9 @@ namespace WordLearner {
 		// @return Pointer to the found word set. Nullptr if word set is not found.
 		const WordSet* findWordSet(int id) const;
 
+		// Checks if given ID exists across all object types
+		bool idExists(int id) const;
+
 		// Prints all loaded words to the console
 		void printWords() const;
 		// Prints all loaded word sets to the console

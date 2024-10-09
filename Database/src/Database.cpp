@@ -33,7 +33,7 @@ namespace WordLearner {
 			return false;
 		}
 		// Check if given word's ID is unique
-		if (findWord(word.id) != nullptr)
+		if (idExists(word.id))
 		{
 			WL_LOG_ERRORF("Trying to add a word with an already existing ID.");
 			return false;
@@ -132,9 +132,9 @@ namespace WordLearner {
 				continue;
 			}
 			// Check if word's ID is unique
-			if (findWord(word.id) != nullptr)
+			if (idExists(word.id))
 			{
-				WL_LOG_ERRORF("Word on line " << lineIdx << " has a duplicate ID with an already existing word.");
+				WL_LOG_ERRORF("Word on line " << lineIdx << " has a duplicate ID with an already existing object.");
 				continue;
 			}
 			// Add word to database's list of words
@@ -221,9 +221,9 @@ namespace WordLearner {
 				continue;
 			}
 			// Check if word set's ID is unique
-			if (findWordSet(wordSet.id) != nullptr)
+			if (idExists(wordSet.id))
 			{
-				WL_LOG_ERRORF("Word set on line " << lineIdx << " has a duplicate ID with an already existing word set.");
+				WL_LOG_ERRORF("Word set on line " << lineIdx << " has a duplicate ID with an already existing object.");
 				continue;
 			}
 			// Add word set to database's list of word sets
@@ -557,6 +557,11 @@ namespace WordLearner {
 			}
 		}
 		return nullptr;
+	}
+
+	bool Database::idExists(int id) const
+	{
+		return findWord(id) != nullptr || findWordSet(id) != nullptr;
 	}
 
 	void Database::printWords() const
