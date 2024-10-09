@@ -24,3 +24,13 @@ DONE: I also noticed a bug.
      The global word set is created internally in Database, it doesn't exist in data file,
      but then we export it to data file at the end. We have to not do that.
      I will go back and fix it in the corresponding commit.
+
+Another function that we'll need in Database when user adds a new word through UI
+is a function for adding a word to a word set.
+Because user will have selected a word set
+and when they add a word we want that word to be added to the selected word set.
+So add a new function to Database
+    bool addWordToWordSet(int wordId, int wordSetId);
+Implement it. The essential line there is
+    wordSet->words.push_back(wordId);
+Other than that check if word and word set exist and check if word is not already in word set.

@@ -50,6 +50,35 @@ namespace WordLearner {
 		return true;
 	}
 
+	bool Database::addWordToWordSet(int wordId, int wordSetId)
+	{
+		// Check if word exists
+		if (findWord(wordId) == nullptr)
+		{
+			WL_LOG_ERRORF("Trying to add a non-existing word to a word set.");
+			return false;
+		}
+		// Get word set
+		WordSet* wordSet = findWordSet(wordSetId);
+		if (wordSet == nullptr)
+		{
+			WL_LOG_ERRORF("Trying to add a word to a non-existing word set.");
+			return false;
+		}
+		// Check if word is not already in the word set
+		for (int iWordId : wordSet->words)
+		{
+			if (iWordId == wordId)
+			{
+				WL_LOG_WARNINGF("Trying to add a word to a word set that already contains that word.");
+				return true;
+			}
+		}
+		// Add word to word set
+		wordSet->words.push_back(wordId);
+		return true;
+	}
+
 	std::vector<Word> Database::getWordsFromWordSet(int wordSetId) const
 	{
 		std::vector<Word> wordsFromWordSet;
@@ -547,6 +576,12 @@ namespace WordLearner {
 		return nullptr;
 	}
 
+	Word* Database::findWord(int id)
+	{
+		// There are uglier things in this world, but not many.
+		return const_cast<Word*>(static_cast<const Database&>(*this).findWord(id));
+	}
+
 	const WordSet* Database::findWordSet(int id) const
 	{
 		for (const WordSet& wordSet : m_wordSets)
@@ -557,6 +592,12 @@ namespace WordLearner {
 			}
 		}
 		return nullptr;
+	}
+
+	WordSet* Database::findWordSet(int id)
+	{
+		// There are uglier things in this world, but not many.
+		return const_cast<WordSet*>(static_cast<const Database&>(*this).findWordSet(id));
 	}
 
 	bool Database::idExists(int id) const
