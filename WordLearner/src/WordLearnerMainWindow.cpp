@@ -44,17 +44,22 @@ void WordLearner::WordLearnerMainWindow::createUi()
     // Create layout
     ui.layout = new QHBoxLayout;
     centralWidget()->setLayout(ui.layout);
+    // Create words layout and word sets layout
+    ui.wordSetsLayout = new QVBoxLayout;
+    ui.layout->addLayout(ui.wordSetsLayout);
+    ui.wordsLayout = new QVBoxLayout;
+    ui.layout->addLayout(ui.wordsLayout);
     // Create list widgets for words and word sets
-    createWordSetsListWidget();
-    createWordsListWidget();
+    createWordSetsUi();
+    createWordsUi();
 }
 
-void WordLearner::WordLearnerMainWindow::createWordSetsListWidget()
+void WordLearner::WordLearnerMainWindow::createWordSetsUi()
 {
     // Create list widget
     ui.wordSetsListWidget = new QListWidget;
     ui.wordSetsListWidget->setStyleSheet(ResourceManager::getListWidgetStylesheet().c_str());
-    ui.layout->addWidget(ui.wordSetsListWidget);
+    ui.wordSetsLayout->addWidget(ui.wordSetsListWidget);
     // Connect word sets list widget's itemSelectionChanged() signal to our custom signal onWordSetChanged()
     connect(ui.wordSetsListWidget, &QListWidget::itemSelectionChanged, this, &WordLearnerMainWindow::onWordSetChanged);
     // Retrieve word sets list from database
@@ -73,16 +78,20 @@ void WordLearner::WordLearnerMainWindow::createWordSetsListWidget()
     ui.wordSetsListWidget->addItems(items);
 }
 
-void WordLearner::WordLearnerMainWindow::createWordsListWidget()
+void WordLearner::WordLearnerMainWindow::createWordsUi()
 {
     // Create list widget
     ui.wordsListWidget = new QListWidget;
     ui.wordsListWidget->setStyleSheet(ResourceManager::getListWidgetStylesheet().c_str());
-    ui.layout->addWidget(ui.wordsListWidget);
+    ui.wordsLayout->addWidget(ui.wordsListWidget);
     // Retrieve words list from database
     const std::vector<Word>& words = database.getWords();
     // Fill list widget with words from database
     updateWordsListWidget(words);
+
+    // Create button for adding words
+    ui.addWordButton = new QPushButton("Add");
+    ui.wordsLayout->addWidget(ui.addWordButton);
 }
 
 void WordLearner::WordLearnerMainWindow::updateWordsListWidget(const std::vector<Word>& words)

@@ -34,3 +34,7 @@ So add a new function to Database
 Implement it. The essential line there is
     wordSet->words.push_back(wordId);
 Other than that check if word and word set exist and check if word is not already in word set.
+
+Now I have all the API that I need in Database.
+Time to do the UI.
+Add a QPushButton after the words list.
