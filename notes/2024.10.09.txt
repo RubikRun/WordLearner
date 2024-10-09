@@ -1,0 +1,26 @@
+Today it's time to implement adding a new word.
+First in Database, then in UI.
+
+For Database create a new function
+    bool addWord(const Word& word);
+Inside of it this is the essential thing
+    m_words.push_back(word);
+Other than that, check if word's ID is valid and unique
+and add word to global word set.
+I also added a new member variable
+    int m_globalWordSetIndex = -1;
+that keeps the index of the global word set,
+so that we don't have to do this every time:
+    findWordSet(0)
+
+TODO: Currently word's IDs are unique and word sets IDs are unique
+      but they are not checked for uniqueness across each other,
+      meaning that we can have a word and a word set with the same ID.
+      That's not good.
+      We want IDs to be unique across all objects.
+      Implement a global ID existence check.
+
+BUG: I also noticed a bug.
+     The global word set is created internally in Database, it doesn't exist in data file,
+     but then we export it to data file at the end. We have to not do that.
+     I will go back and fix it in the corresponding commit.

@@ -24,6 +24,32 @@ namespace WordLearner {
 		exportWordSets("Database/data/word_sets.data");
 	}
 
+	bool Database::addWord(const Word& word)
+	{
+		// Check if given word's ID is valid
+		if (word.id <= 0)
+		{
+			WL_LOG_ERRORF("Trying to add a word with an invalid ID.");
+			return false;
+		}
+		// Check if given word's ID is unique
+		if (findWord(word.id) != nullptr)
+		{
+			WL_LOG_ERRORF("Trying to add a word with an already existing ID.");
+			return false;
+		}
+		// Add new word to database's list of words
+		m_words.push_back(word);
+		// Add new word to global word set
+		if (m_globalWordSetIndex < 0 || m_globalWordSetIndex >= m_wordSets.size())
+		{
+			WL_LOG_ERRORF("Trying to add a new word but global word set is not initialized.");
+			return false;
+		}
+		m_wordSets[m_globalWordSetIndex].words.push_back(word.id);
+		return true;
+	}
+
 	std::vector<Word> Database::getWordsFromWordSet(int wordSetId) const
 	{
 		std::vector<Word> wordsFromWordSet;
@@ -179,12 +205,8 @@ namespace WordLearner {
 		{
 			m_wordSets.reserve(wordSetsCount);
 		}
-		// Create global word set and add it to word sets list
-		{
-			WordSet globalWordSet;
-			createGlobalWordSet(globalWordSet);
-			m_wordSets.push_back(globalWordSet);
-		}
+		// Create global word set containing all loaded words
+		createGlobalWordSet();
 		// Read data file line by line
 		int wordSetsProcessed = 0;
 		int lineIdx = 1;
@@ -348,17 +370,22 @@ namespace WordLearner {
 		return true;
 	}
 
-	void Database::createGlobalWordSet(WordSet& wordSet) const
+	void Database::createGlobalWordSet()
 	{
-		wordSet.id = 0;
-		wordSet.name = "global";
+		// Construct global word set with all loaded words
+		WordSet globalWordSet;
+		globalWordSet.id = 0;
+		globalWordSet.name = "global";
 		// Allocate memory for words, as many as we have loaded
-		wordSet.words.reserve(m_words.size());
+		globalWordSet.words.reserve(m_words.size());
 		// Construct list of IDs of loaded words
 		for (const Word& word : m_words)
 		{
-			wordSet.words.push_back(word.id);
+			globalWordSet.words.push_back(word.id);
 		}
+		// Add global word set to list of word sets
+		m_globalWordSetIndex = int(m_wordSets.size());
+		m_wordSets.push_back(globalWordSet);
 	}
 
 	bool Database::parseIntList(const std::string& decl, std::vector<int>& list) const

@@ -28,6 +28,10 @@ namespace WordLearner {
 			return m_wordSets;
 		}
 
+		// Adds a new word to database.
+		// Returns true on success.
+		bool addWord(const Word& word);
+
 		// Returns list of words from a given word set.
 		// @param[in] wordSetId - ID of word set whose words list we want to retrieve
 		// @return List of words contained in the word set.
@@ -50,7 +54,8 @@ namespace WordLearner {
 
 		// Creates a global word set containing all currently loaded words.
 		// Global word set always has an ID=0 and name="global".
-		void createGlobalWordSet(WordSet& wordSet) const;
+		// Adds global word set to the list of word sets.
+		void createGlobalWordSet();
 
 		// Parses a list of integers from a declaration from a .data file.
 		// Returns true on success.
@@ -90,6 +95,9 @@ namespace WordLearner {
 		// A string containing the separators used in data files
 		// to separate object properties and list elements
 		std::string m_separators;
+
+		// Index of global word set in the list of word sets
+		int m_globalWordSetIndex = -1;
 	};
 
 } // namespace WordLearner
