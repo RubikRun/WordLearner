@@ -1,0 +1,17 @@
+Continue from last time.
+Let's create a dialog that will pop up when user clicks on "Create new word" button.
+This dialog should consist of 3 line edits
+- termA
+- termB
+- note
+
+Create new .h/.cpp files in WordLearner project
+    CreateWordDialog.h
+    CreateWordDialog.cpp
+and just implement it, it's kinda straightforward.
+
+Now we have a dialog that opens up when user clicks on "New" button.
+User can enter new word's data in this dialog and press "Create word" button
+which calls this new slot in WordLearnerMainWindow
+    void onCreateWord(const std::string& wordA, const std::string& wordB, const std::string& note);
+so this is the function that should actually create the word with the received data and update UI.

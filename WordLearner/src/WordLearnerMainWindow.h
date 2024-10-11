@@ -29,6 +29,13 @@ namespace WordLearner
         // Slot that's called when a new word set is selected in word sets list widget
         void onWordSetChanged();
 
+        // Slot that's called when the "Create new word" button is pressed
+        void onCreateWordButtonPressed();
+
+        // Slot that's called when a new word must be created.
+        // It's called with the new word's data.
+        void onCreateWord(const std::string& termA, const std::string& termB, const std::string& note);
+
     private: /* functions */
 
         // Creates all UI elements of window
@@ -57,8 +64,8 @@ namespace WordLearner
             QVBoxLayout* wordsLayout = nullptr;
             // List widget for showing a list of words
             QListWidget* wordsListWidget = nullptr;
-            // Button for adding a new word
-            QPushButton* addWordButton = nullptr;
+            // Button for creating a new word
+            QPushButton* createWordButton = nullptr;
         } ui;
 
         // List of IDs of words that are currently shown in words list widget

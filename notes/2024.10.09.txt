@@ -13,7 +13,7 @@ that keeps the index of the global word set,
 so that we don't have to do this every time:
     findWordSet(0)
 
-TODO: Currently word's IDs are unique and word sets IDs are unique
+DONE: Currently word's IDs are unique and word sets IDs are unique
       but they are not checked for uniqueness across each other,
       meaning that we can have a word and a word set with the same ID.
       That's not good.
@@ -38,3 +38,18 @@ Other than that check if word and word set exist and check if word is not alread
 Now I have all the API that I need in Database.
 Time to do the UI.
 Add a QPushButton after the words list.
+Now connect button to a new slot
+    void onCreateWordButtonPressed();
+Inside of that slot I should open a small dialog asking user to enter new word.
+User will have to enter 3 separate strings - termA, termB, note
+I tried doing it temporarily with 3 calls to
+    QInputDialog::getText()
+It works but it shows this annoying warning message in console
+    QWindowsWindow::setGeometry: Unable to set geometry 120x30+841-620 (frame: 136x69+833-651)
+    on QWidgetWindow/"QInputDialogClassWindow" on "DELL P2722H". Resulting geometry: 178x96+841-620
+    (frame: 194x135+833-651) margins: 8, 31, 8, 8 minimum size: 178x96 maximum size:
+    524287x96 MINMAXINFO(maxSize=POINT(x=0, y=0), maxpos=POINT(x=0, y=0), maxtrack=POINT(x=524303, y=135),
+    mintrack=POINT(x=194, y=135))
+and it looks kinda bad,
+so I better implement a proper dialog with 3 line edits.
+Do that next time.

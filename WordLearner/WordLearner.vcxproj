@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CreateWordDialog.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\WordLearnerMainWindow.cpp" />
@@ -19,6 +20,7 @@
     <QtMoc Include="src\WordLearnerMainWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="CreateWordDialog.h" />
     <ClInclude Include="ResourceManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
