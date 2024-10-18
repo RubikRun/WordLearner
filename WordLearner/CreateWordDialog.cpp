@@ -1,7 +1,5 @@
 #include "CreateWordDialog.h"
 
-#include "CreateWordDialog.h"
-
 using namespace WordLearner;
 
 CreateWordDialog::CreateWordDialog(QWidget* parent)

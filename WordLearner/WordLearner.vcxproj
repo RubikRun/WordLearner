@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CreateWordDialog.cpp" />
+    <ClCompile Include="CreateWordSetDialog.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\WordLearnerMainWindow.cpp" />
@@ -21,6 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="CreateWordDialog.h" />
+    <QtMoc Include="CreateWordSetDialog.h" />
     <ClInclude Include="ResourceManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

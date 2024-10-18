@@ -31,10 +31,15 @@ namespace WordLearner
 
         // Slot that's called when the "Create new word" button is pressed
         void onCreateWordButtonPressed();
-
         // Slot that's called when a new word must be created.
         // It's called with the new word's data.
         void onCreateWord(const std::string& termA, const std::string& termB, const std::string& note);
+
+        // Slot that's called when the "Create new word set" button is pressed
+        void onCreateWordSetButtonPressed();
+        // Slot that's called when a new word set must be created.
+        // It's called with the new word set's data.
+        void onCreateWordSet(const std::string& name);
 
     private: /* functions */
 

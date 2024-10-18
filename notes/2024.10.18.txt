@@ -12,3 +12,14 @@ Now let's continue with implementing adding a new word set.
 Hopefully it will be similar, but simpler since a word set doesn't have any other object containing it.
 Start by adding another "New" button, this time under word sets list widget.
 Done, easy, looks good.
+
+Now let's create a dialog that will open up when this "New" button is clicked
+    CreateWordSetDialog.h
+    CreateWordSetDialog.cpp
+    class CreateWordSetDialog
+Copy contents of .h and .cpp file from
+    CreateWordDialog.h
+    CreateWordDialog.cpp
+We need basically the same thing but just with 1 line edit for the set's name, for now.
+Done, easy, looks good.
+Does nothing yet, but the correct signal in WordLearnerMainWindow is called with the entered name.

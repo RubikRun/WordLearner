@@ -5,6 +5,7 @@
 #include "ResourceManager.h"
 #include "Logger.hpp"
 #include "CreateWordDialog.h"
+#include "CreateWordSetDialog.h"
 
 using namespace WordLearner;
 
@@ -35,7 +36,7 @@ void WordLearnerMainWindow::onWordSetChanged()
 
 void WordLearner::WordLearnerMainWindow::onCreateWordButtonPressed()
 {
-    // Create dialog for creating of a new word
+    // Create dialog for creating a new word
     CreateWordDialog createWordDialog(this);
     // Connect dialog's createWord() signal to our onCreateWord() slot here
     connect(&createWordDialog, &CreateWordDialog::createWord, this, &WordLearnerMainWindow::onCreateWord);
@@ -73,6 +74,21 @@ void WordLearner::WordLearnerMainWindow::onCreateWord(const std::string& termA, 
     // Update words list in UI so that it shows the new word
     const std::vector<Word>& words = database.getWordsFromWordSet(wordSetId);
     updateWordsListWidget(words);
+}
+
+void WordLearner::WordLearnerMainWindow::onCreateWordSetButtonPressed()
+{
+    // Create dialog for creating a new word set
+    CreateWordSetDialog createWordSetDialog(this);
+    // Connect dialog's createWordSet() signal to our onCreateWordSet() slot here
+    connect(&createWordSetDialog, &CreateWordSetDialog::createWordSet, this, &WordLearnerMainWindow::onCreateWordSet);
+    // Open dialog
+    createWordSetDialog.exec();
+}
+
+void WordLearner::WordLearnerMainWindow::onCreateWordSet(const std::string& name)
+{
+    qDebug() << "onCreateWordSet() <----------";
 }
 
 void WordLearner::WordLearnerMainWindow::createUi()
@@ -118,6 +134,7 @@ void WordLearner::WordLearnerMainWindow::createWordSetsUi()
     // Create button for adding word sets
     ui.createWordSetButton = new QPushButton("New");
     ui.wordSetsLayout->addWidget(ui.createWordSetButton);
+    connect(ui.createWordSetButton, &QPushButton::released, this, &WordLearnerMainWindow::onCreateWordSetButtonPressed);
 }
 
 void WordLearner::WordLearnerMainWindow::createWordsUi()
