@@ -21,7 +21,7 @@ namespace WordLearner
     public:
 
         // Creates a WordLearner main window with data from given database
-        WordLearnerMainWindow(const Database& database, QWidget* parent = nullptr);
+        WordLearnerMainWindow(Database& database, QWidget* parent = nullptr);
         ~WordLearnerMainWindow();
 
     private slots:
@@ -49,6 +49,9 @@ namespace WordLearner
         // Updates words list widget to contain the given list of words. Removes all previously added words.
         void updateWordsListWidget(const std::vector<Word>& words);
 
+        // Returns ID of word set currently selected in UI
+        int getSelectedWordSetId() const;
+
     private: /* variables */
 
         // Struct for holding together window's UI elements
@@ -69,11 +72,11 @@ namespace WordLearner
         } ui;
 
         // List of IDs of words that are currently shown in words list widget
-        std::vector<int> wordsListIds;
+        std::vector<int> m_wordsListIds;
         // List of IDs of word sets that are currently shown in word sets list widget
-        std::vector<int> wordSetsListIds;
+        std::vector<int> m_wordSetsListIds;
 
-        const Database& database;
+        Database& database;
     };
 
 } // namespace WordLearner

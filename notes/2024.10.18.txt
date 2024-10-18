@@ -1,0 +1,8 @@
+I looked through the changes one more time
+and tested it, it works.
+I tested it by adding 2 words in each word set,
+closing the application,
+confirming that .data files are updated,
+opening the application again to confirm that new words will be loaded correctly.
+So it's ready. Let's commit.
+

@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <cmath>
 
 #include "Logger.hpp"
 
@@ -24,30 +25,30 @@ namespace WordLearner {
 		exportWordSets("Database/data/word_sets.data");
 	}
 
-	bool Database::addWord(const Word& word)
+	int Database::createWord(const std::string& termA, const std::string& termB, const std::string& note)
 	{
-		// Check if given word's ID is valid
-		if (word.id <= 0)
+		// Construct Word object from given data
+		Word word;
+		word.termA = termA;
+		word.termB = termB;
+		word.note = note;
+		// Generate a new ID for the word
+		word.id = getNewId();
+		// Add new word to database
+		if (!addWord(word))
 		{
-			WL_LOG_ERRORF("Trying to add a word with an invalid ID.");
-			return false;
+			return -1;
 		}
-		// Check if given word's ID is unique
-		if (idExists(word.id))
-		{
-			WL_LOG_ERRORF("Trying to add a word with an already existing ID.");
-			return false;
-		}
-		// Add new word to database's list of words
-		m_words.push_back(word);
 		// Add new word to global word set
-		if (m_globalWordSetIndex < 0 || m_globalWordSetIndex >= m_wordSets.size())
+		if (m_globalWordSetIndex >= 0 && m_globalWordSetIndex < m_wordSets.size())
+		{
+			m_wordSets[m_globalWordSetIndex].words.push_back(word.id);
+		}
+		else
 		{
 			WL_LOG_ERRORF("Trying to add a new word but global word set is not initialized.");
-			return false;
 		}
-		m_wordSets[m_globalWordSetIndex].words.push_back(word.id);
-		return true;
+		return word.id;
 	}
 
 	bool Database::addWordToWordSet(int wordId, int wordSetId)
@@ -107,6 +108,49 @@ namespace WordLearner {
 		return wordsFromWordSet;
 	}
 
+	bool Database::addWord(const Word& word)
+	{
+		if (word.id < 0)
+		{
+			WL_LOG_ERRORF("Trying to add a word with an invalid negative ID = " << word.id);
+			return false;
+		}
+		if (word.id == 0)
+		{
+			WL_LOG_ERRORF("Trying to add a word with an invalid ID = 0. This ID is reserved for the global word set.");
+			return false;
+		}
+		// Check if word's ID is unique
+		if (idExists(word.id))
+		{
+			WL_LOG_ERRORF("Trying to add a word that has a duplicate ID = " << word.id << " with an already existing object.");
+			return false;
+		}
+		// Add word to database's list of words
+		m_words.push_back(word);
+		updateMaxId(word.id);
+		return true;
+	}
+
+	bool Database::addWordSet(const WordSet& wordSet)
+	{
+		if (wordSet.id < 0)
+		{
+			WL_LOG_ERRORF("Trying to add a word set with an invalid negative ID = " << wordSet.id);
+			return false;
+		}
+		// Check if word set's ID is unique
+		if (idExists(wordSet.id))
+		{
+			WL_LOG_ERRORF("Trying to add a word set that has a duplicate ID = " << wordSet.id << " with an already existing object.");
+			return false;
+		}
+		// Add word set to database's list of word sets
+		m_wordSets.push_back(wordSet);
+		updateMaxId(wordSet.id);
+		return true;
+	}
+
 	void Database::loadWords(const std::string& dataFilepath)
 	{
 		if (m_separators.empty())
@@ -160,14 +204,8 @@ namespace WordLearner {
 				WL_LOG_ERRORF("Invalid word on line " << lineIdx << ".");
 				continue;
 			}
-			// Check if word's ID is unique
-			if (idExists(word.id))
-			{
-				WL_LOG_ERRORF("Word on line " << lineIdx << " has a duplicate ID with an already existing object.");
-				continue;
-			}
-			// Add word to database's list of words
-			m_words.push_back(word);
+			// Add word to database
+			addWord(word);
 			wordsProcessed++;
 		}
 		// Log info about loaded words
@@ -249,14 +287,8 @@ namespace WordLearner {
 				WL_LOG_ERRORF("Invalid word set on line " << lineIdx << ".");
 				continue;
 			}
-			// Check if word set's ID is unique
-			if (idExists(wordSet.id))
-			{
-				WL_LOG_ERRORF("Word set on line " << lineIdx << " has a duplicate ID with an already existing object.");
-				continue;
-			}
-			// Add word set to database's list of word sets
-			m_wordSets.push_back(wordSet);
+			// Add word set to database
+			addWordSet(wordSet);
 			wordSetsProcessed++;
 		}
 		// Log info about loaded word sets
@@ -329,6 +361,11 @@ namespace WordLearner {
 			WL_LOG_ERRORF("Word on line " << lineIdx << " is empty.");
 			return false;
 		}
+		if (word.id <= 0)
+		{
+			WL_LOG_ERRORF("Word on line " << lineIdx << " has a non-positive ID.");
+			return false;
+		}
 		// - Read word's term A
 		if (!std::getline(declStream, word.termA, m_separators[0]))
 		{
@@ -373,6 +410,11 @@ namespace WordLearner {
 			WL_LOG_ERRORF("Word set on line " << lineIdx << " is empty.");
 			return false;
 		}
+		if (wordSet.id <= 0)
+		{
+			WL_LOG_ERRORF("Word set on line " << lineIdx << " has a non-positive ID.");
+			return false;
+		}
 		// - Read word set's name
 		if (!std::getline(declStream, wordSet.name, m_separators[0]))
 		{
@@ -401,7 +443,7 @@ namespace WordLearner {
 
 	void Database::createGlobalWordSet()
 	{
-		// Construct global word set with all loaded words
+		// Construct an empty global word set
 		WordSet globalWordSet;
 		globalWordSet.id = 0;
 		globalWordSet.name = "global";
@@ -412,9 +454,9 @@ namespace WordLearner {
 		{
 			globalWordSet.words.push_back(word.id);
 		}
-		// Add global word set to list of word sets
+		// Add global word set to database
 		m_globalWordSetIndex = int(m_wordSets.size());
-		m_wordSets.push_back(globalWordSet);
+		addWordSet(globalWordSet);
 	}
 
 	bool Database::parseIntList(const std::string& decl, std::vector<int>& list) const
@@ -603,6 +645,16 @@ namespace WordLearner {
 	bool Database::idExists(int id) const
 	{
 		return findWord(id) != nullptr || findWordSet(id) != nullptr;
+	}
+
+	int Database::getNewId() const
+	{
+		return m_maxId + 1;
+	}
+
+	void Database::updateMaxId(int newId)
+	{
+		m_maxId = std::max(m_maxId, newId);
 	}
 
 	void Database::printWords() const

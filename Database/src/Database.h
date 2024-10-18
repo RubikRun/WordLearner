@@ -28,10 +28,10 @@ namespace WordLearner {
 			return m_wordSets;
 		}
 
-		// Adds a new word to database.
-		// Returns true on success.
-		bool addWord(const Word& word);
-
+		// Creates a new word in database from given data.
+		// Adds new word to global word set.
+		// Returns created word's ID.
+		int createWord(const std::string& termA, const std::string& termB, const std::string& note);
 		// Adds a given word to a given word set.
 		// Returns true on success.
 		bool addWordToWordSet(int wordId, int wordSetId);
@@ -42,6 +42,14 @@ namespace WordLearner {
 		std::vector<Word> getWordsFromWordSet(int wordSetId) const;
 
 	private: /* functions */
+		// Adds a new word to database, and keeps track of max ID.
+		// Does NOT add word to global word set.
+		// Returns true on success.
+		bool addWord(const Word& word);
+		// Adds a new word set to database, and keeps track of max ID.
+		// Returns true on success.
+		bool addWordSet(const WordSet& wordSet);
+
 		// Loads words from a given .data file
 		void loadWords(const std::string& dataFilepath);
 		// Loads word sets from a given .data file
@@ -90,6 +98,10 @@ namespace WordLearner {
 
 		// Checks if given ID exists across all object types
 		bool idExists(int id) const;
+		// Generates a new non-existing ID that can be used for a new object
+		int getNewId() const;
+		// Updates max ID with a given ID of a new object
+		void updateMaxId(int newId);
 
 		// Prints all loaded words to the console
 		void printWords() const;
@@ -107,6 +119,9 @@ namespace WordLearner {
 
 		// Index of global word set in the list of word sets
 		int m_globalWordSetIndex = -1;
+
+		// Current max ID across all objects in database
+		int m_maxId = 0;
 	};
 
 } // namespace WordLearner

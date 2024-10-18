@@ -1,0 +1,9 @@
+So let's make addWord() and addWordSet() return ID instead of bool.
+Okay, a little quiestionable design, but ok for now.
+Actually no, let's make it good.
+addWord() and addWordSet() shouldn't be responsible for generating ID.
+We should have a function for adding a Word object with an already created ID,
+and a function for creating a Word object and its ID from given data and adding it to the list.
+So let's bring back addWord() and addWordSet() to returning bool, and let's move generating of ID
+in createWord() and createWordSet().
+Okay, I think it's ready. Next time test.

@@ -1,0 +1,26 @@
+Let's look for that bug now.
+This one:
+    TO-DO: Fix bug. Adding one word works, but trying to add a second one adds the first one again.
+
+I found one thing that's wrong.
+In updateWordsListWidget() we add word IDs to m_wordsListIds,
+but we don't clear this list in the beginning of the function.
+Fixed that, but it was not the bug.
+
+I found the bug.
+In createWord() we generate an ID for the new word
+but we don't update m_maxId.
+Maybe doing this manually every time we add a word to m_words or a word set to m_wordSets
+is not a good idea.
+It'd be better if we have a function that adds a new word,
+takes care of generating an ID if needed,
+and takes care of updating m_maxId.
+So let's create these 2 new private functions
+    bool addWord(Word word);
+    bool addWordSet(WordSet wordSet);
+and replace all manual push_back()s in m_words and m_wordSets with those 2 functions.
+I also added the check for uniqueness of ID to be inside those 2 functions
+instead of directly in loadWords() and loadWordSets().
+Okay I found a problem now.
+The function createWord() no longer returns the newly generated ID
+because what actually generates the ID is addWord()

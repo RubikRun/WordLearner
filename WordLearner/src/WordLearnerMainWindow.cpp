@@ -8,7 +8,7 @@
 
 using namespace WordLearner;
 
-WordLearnerMainWindow::WordLearnerMainWindow(const Database& database, QWidget *parent)
+WordLearnerMainWindow::WordLearnerMainWindow(Database& database, QWidget *parent)
     : QMainWindow(parent)
     , database(database)
 {
@@ -22,15 +22,11 @@ WordLearnerMainWindow::~WordLearnerMainWindow()
 
 void WordLearnerMainWindow::onWordSetChanged()
 {
-    // Get index of selected word set in list
-    const int wordSetIdx = ui.wordSetsListWidget->currentRow();
-    // Get ID of selected word set
-    if (wordSetIdx < 0 || wordSetIdx >= wordSetsListIds.size())
+    const int wordSetId = getSelectedWordSetId();
+    if (wordSetId < 0)
     {
-        WL_LOG_ERRORF("Cannot get ID of selected word set, index out of range.");
         return;
     }
-    const int wordSetId = wordSetsListIds[wordSetIdx];
     // Get words from selected word set
     const std::vector<Word> words = database.getWordsFromWordSet(wordSetId);
     // Update words list widget with words from set
@@ -49,7 +45,34 @@ void WordLearner::WordLearnerMainWindow::onCreateWordButtonPressed()
 
 void WordLearner::WordLearnerMainWindow::onCreateWord(const std::string& termA, const std::string& termB, const std::string& note)
 {
-    qDebug() << "onCreateWordDialogFinished() <----------";
+    // Create word in database
+    const int wordId = database.createWord(termA, termB, note);
+    if (wordId < 0)
+    {
+        WL_LOG_ERRORF("Failed to create new word.");
+        return;
+    }
+    // Add new word to selected word set
+    const int wordSetId = getSelectedWordSetId();
+    if (wordSetId == 0)
+    {
+        // If selected word set is the global word set,
+        // we don't need to explicitly add new word to it,
+        // because it's automatically added when created.
+        return;
+    }
+    if (wordSetId < 0)
+    {
+        WL_LOG_ERRORF("Trying to add new word to selected word set, but selected word set is invalid.");
+        return;
+    }
+    if (!database.addWordToWordSet(wordId, wordSetId))
+    {
+        WL_LOG_ERRORF("Cannot add new word to selected word set.");
+    }
+    // Update words list in UI so that it shows the new word
+    const std::vector<Word>& words = database.getWordsFromWordSet(wordSetId);
+    updateWordsListWidget(words);
 }
 
 void WordLearner::WordLearnerMainWindow::createUi()
@@ -81,13 +104,14 @@ void WordLearner::WordLearnerMainWindow::createWordSetsUi()
     const std::vector<WordSet>& wordSets = database.getWordSets();
     // Create a list of string items, one for each word set
     QStringList items(wordSets.size());
+    m_wordSetsListIds.clear();
     for (int i = 0; i < wordSets.size(); ++i)
     {
         const WordSet& wordSet = wordSets[i];
         const std::string wordSetView = (wordSet.id == 0) ? "*" : wordSet.name;
         items[i] = QString(wordSetView.c_str());
         // Add word set ID to word sets IDs list
-        wordSetsListIds.push_back(wordSet.id);
+        m_wordSetsListIds.push_back(wordSet.id);
     }
     // Add items to list widget
     ui.wordSetsListWidget->addItems(items);
@@ -113,6 +137,7 @@ void WordLearner::WordLearnerMainWindow::updateWordsListWidget(const std::vector
 {
     // Remove all previously added words
     ui.wordsListWidget->clear();
+    m_wordsListIds.clear();
     // Create a list of string items, one for each word
     QStringList items(words.size());
     for (int i = 0; i < words.size(); ++i)
@@ -121,8 +146,21 @@ void WordLearner::WordLearnerMainWindow::updateWordsListWidget(const std::vector
         const std::string wordView = word.termA + "  -  " + word.termB;
         items[i] = QString(wordView.c_str());
         // Add word ID to words IDs list
-        wordsListIds.push_back(word.id);
+        m_wordsListIds.push_back(word.id);
     }
     // Add items to list widget
     ui.wordsListWidget->addItems(items);
+}
+
+int WordLearner::WordLearnerMainWindow::getSelectedWordSetId() const
+{
+    // Get index of selected word set in list
+    const int wordSetIdx = ui.wordSetsListWidget->currentRow();
+    // Get ID of selected word set
+    if (wordSetIdx < 0 || wordSetIdx >= m_wordSetsListIds.size())
+    {
+        WL_LOG_ERRORF("Cannot get ID of selected word set, index out of range.");
+        return -1;
+    }
+    return m_wordSetsListIds[wordSetIdx];
 }

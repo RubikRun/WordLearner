@@ -15,3 +15,37 @@ User can enter new word's data in this dialog and press "Create word" button
 which calls this new slot in WordLearnerMainWindow
     void onCreateWord(const std::string& wordA, const std::string& wordB, const std::string& note);
 so this is the function that should actually create the word with the received data and update UI.
+
+Let's implement this slot.
+Now creating the actual Word object from the given data, I realize that
+we need some way to get a new non-existing ID from database.
+Or actually, even better, this function in Database
+    bool addWord(const Word& word);
+should not be like that at all.
+It's better to be like that
+    int createWord(const std::string& termA, const std::string& termB, const std::string& note);
+Database will handle the creation of the actual Word object,
+it will generate an appropriate ID, etc.
+Caller's only job should be to provide the raw data, nothing more.
+Caller shouldn't have the responsibility of creating a Word object and assigning it ID.
+So now we will need a function that generates a new ID in Database
+    int getNewId() const;
+and the way we'll do it is that Database will keep the current max ID in a new member variable
+    int m_maxId = 0;
+and now getNewId() will just return this max ID + 1
+Of course, we would have to update m_maxId in all places where we add a new object to database. Done.
+
+Okay, we can finally continue with implementing onCreateWord() slot
+Just call createWord() with new word's data.
+
+What's left to do is to add new word to the currently selected word set.
+For that we will need selected word set's ID.
+We already have this lists in WordLearnerMainWindow
+    std::vector<int> wordSetsListIds;
+which maps word set items from the list widget to word set IDs from database,
+so we can get word set's ID same way as in onWordSetChanged()
+In fact, let's take it out in a new separate function
+    int getSelectedWordSetId() const;
+
+Done, but there is a bug.
+DONE: Fix bug. Adding one word works, but trying to add a second one adds the first one again.
