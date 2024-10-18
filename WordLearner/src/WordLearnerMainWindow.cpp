@@ -21,7 +21,7 @@ WordLearnerMainWindow::WordLearnerMainWindow(Database& database, QWidget *parent
 WordLearnerMainWindow::~WordLearnerMainWindow()
 {}
 
-void WordLearnerMainWindow::onWordSetChanged()
+void WordLearnerMainWindow::onWordSetSelectionChanged()
 {
     const int wordSetId = getSelectedWordSetId();
     if (wordSetId < 0)
@@ -100,6 +100,11 @@ void WordLearner::WordLearnerMainWindow::onCreateWordSet(const std::string& name
     updateWordSetsListWidget(wordSets, wordSetId);
 }
 
+void WordLearner::WordLearnerMainWindow::onWordSetEdited(QListWidgetItem* item)
+{
+    qDebug() << "onWordSetEdited() " << item->text();
+}
+
 void WordLearner::WordLearnerMainWindow::createUi()
 {
     // Create central widget
@@ -123,8 +128,8 @@ void WordLearner::WordLearnerMainWindow::createWordSetsUi()
     ui.wordSetsListWidget = new QListWidget;
     ui.wordSetsListWidget->setStyleSheet(ResourceManager::getListWidgetStylesheet().c_str());
     ui.wordSetsLayout->addWidget(ui.wordSetsListWidget);
-    // Connect word sets list widget's itemSelectionChanged() signal to our custom signal onWordSetChanged()
-    connect(ui.wordSetsListWidget, &QListWidget::itemSelectionChanged, this, &WordLearnerMainWindow::onWordSetChanged);
+    // Connect word sets list widget's itemSelectionChanged() signal to our custom slot onWordSetSelectionChanged()
+    connect(ui.wordSetsListWidget, &QListWidget::itemSelectionChanged, this, &WordLearnerMainWindow::onWordSetSelectionChanged);
     // Retrieve word sets list from database
     const std::vector<WordSet>& wordSets = database.getWordSets();
     // Fill list widget with word sets from database
@@ -156,33 +161,39 @@ void WordLearner::WordLearnerMainWindow::updateWordsListWidget(const std::vector
     // Remove all previously added words
     ui.wordsListWidget->clear();
     m_wordsListIds.clear();
-    // Create a list of string items, one for each word
-    QStringList items(words.size());
+    // Fill list widget with items, one for each word
     for (int i = 0; i < words.size(); ++i)
     {
         const Word& word = words[i];
+        // Create an item from word, and add it to list widget
         const std::string wordView = word.termA + "  -  " + word.termB;
-        items[i] = QString(wordView.c_str());
+        QListWidgetItem* item = new QListWidgetItem(QString(wordView.c_str()), ui.wordsListWidget);
         // Add word ID to words IDs list
         m_wordsListIds.push_back(word.id);
     }
-    // Add items to list widget
-    ui.wordsListWidget->addItems(items);
 }
 
 void WordLearner::WordLearnerMainWindow::updateWordSetsListWidget(const std::vector<WordSet>& wordSets, int selectedWordSetId)
 {
+    // Temporarily disconnect word sets list widget's itemChanged() signal
+    // for the duration of this function, while we are adding new items,
+    // because we don't want the slot to be called each time when we add a new item here,
+    // we want it to be called only when user edits items in UI.
+    disconnect(ui.wordSetsListWidget, &QListWidget::itemChanged, this, &WordLearnerMainWindow::onWordSetEdited);
+
     // Remove all previously added word sets
     ui.wordSetsListWidget->clear();
     m_wordSetsListIds.clear();
-    // Create a list of string items, one for each word set
-    QStringList items(wordSets.size());
+    // Fill list widget with items, one for each word set
     int selectedWordSetIndex = -1;
     for (int i = 0; i < wordSets.size(); ++i)
     {
         const WordSet& wordSet = wordSets[i];
+        // Create an item from word set, and add it to list widget
         const std::string wordSetView = (wordSet.id == 0) ? "*" : wordSet.name;
-        items[i] = QString(wordSetView.c_str());
+        QListWidgetItem* item = new QListWidgetItem(QString(wordSetView.c_str()), ui.wordSetsListWidget);
+        // Make item be editable
+        item->setFlags(item->flags() | Qt::ItemIsEditable);
         // Add word set ID to word sets IDs list
         m_wordSetsListIds.push_back(wordSet.id);
         // Keep track of index of the word set that we want to be selected by default
@@ -191,13 +202,14 @@ void WordLearner::WordLearnerMainWindow::updateWordSetsListWidget(const std::vec
             selectedWordSetIndex = i;
         }
     }
-    // Add items to list widget
-    ui.wordSetsListWidget->addItems(items);
     // Select word set that should be selected by default
     if (selectedWordSetIndex >= 0)
     {
         ui.wordSetsListWidget->setCurrentRow(selectedWordSetIndex);
     }
+
+    // Connect word sets list widget's itemChanged() signal to our custom slot onWordSetEdited
+    connect(ui.wordSetsListWidget, &QListWidget::itemChanged, this, &WordLearnerMainWindow::onWordSetEdited);
 }
 
 int WordLearner::WordLearnerMainWindow::getSelectedWordSetId() const

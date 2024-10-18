@@ -61,3 +61,26 @@ It works.
 
 Okay, so creating word sets is done.
 Let's commit.
+
+
+
+Now it's time to start with editing words and editing word sets.
+This time I will start with word sets, because it's simpler.
+So let's implement editing word sets.
+The only thing that can be edited in a word set is its name.
+So I should make the list items be editable,
+and every time an item is edited some slot should be called.
+The slot will be this
+    void onWordSetEdited(QListWidgetItem* item);
+It kinda works now,
+the only problem is that the slot is also called when items are created at launch time
+and when a new word set is created by user.
+A solution would be to temporarily disconnect the itemChanged() signal
+while adding items programatically in
+    updateWordSetsListWidget()
+and then at the end of the function connect it again.
+This function is the only place where we add items to that list, so it should be enough.
+Yep, it works.
+Okay, it's ready.
+Items are editable now, and we have a slot that's called when an item is edited in UI.
+Let's commit.

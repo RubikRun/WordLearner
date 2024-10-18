@@ -27,7 +27,7 @@ namespace WordLearner
     private slots:
 
         // Slot that's called when a new word set is selected in word sets list widget
-        void onWordSetChanged();
+        void onWordSetSelectionChanged();
 
         // Slot that's called when the "Create new word" button is pressed
         void onCreateWordButtonPressed();
@@ -40,6 +40,9 @@ namespace WordLearner
         // Slot that's called when a new word set must be created.
         // It's called with the new word set's data.
         void onCreateWordSet(const std::string& name);
+
+        // Slot that's called when a word set is edited in UI.
+        void onWordSetEdited(QListWidgetItem* item);
 
     private: /* functions */
 
