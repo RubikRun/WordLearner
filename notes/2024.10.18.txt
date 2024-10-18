@@ -23,3 +23,41 @@ Copy contents of .h and .cpp file from
 We need basically the same thing but just with 1 line edit for the set's name, for now.
 Done, easy, looks good.
 Does nothing yet, but the correct signal in WordLearnerMainWindow is called with the entered name.
+
+What's left now is to implement the actual creation of the word set
+when CreateWordSetDialog is finished.
+First we will need a new public function in Database
+    int createWordSet(const std::string& name)
+that will create a new word set with given name.
+Then implement
+    onCreateWordSet()
+to actually create the word set by calling Database's new function createWordSet()
+and update the word sets list widget.
+For that we will need to refactor filling of word sets list widget from createWordSetsUi() to a new function
+    updateWordSetsListWidget()
+(same as for word)
+Okay, I think it's ready.
+Let's test.
+It works!
+I tried creating a few new word sets,
+adding words to them,
+exiting application, confirming that they export to .data files correctly,
+starting application again, confirming that new word sets show up and contain the added words.
+
+Oh actually I noticed one thing.
+After a new word set is created I want it to become the selected word set automatically.
+For that we will need a new parameter to this function
+    updateWordSetsListWidget()
+that will specify an ID of the word set that we want to be selected at the beginning.
+    void updateWordSetsListWidget(const std::vector<WordSet>& wordSets, int selectedWordSetId = -1);
+Okay and now we can just pass the ID of the newly created word set to updateWordSetsListWidget() in
+    onCreateWordSet()
+And now we don't even need to manually update words list
+because when we change the selected word set our slot is called
+    onWordSetChanged()
+and words list is updated automatically.
+Let's test.
+It works.
+
+Okay, so creating word sets is done.
+Let's commit.

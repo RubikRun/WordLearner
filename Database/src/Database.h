@@ -32,10 +32,13 @@ namespace WordLearner {
 		// Adds new word to global word set.
 		// Returns created word's ID.
 		int createWord(const std::string& termA, const std::string& termB, const std::string& note);
+		// Creates a new word set in database, with given name.
+		// Returns created word set's ID.
+		int createWordSet(const std::string& name);
+
 		// Adds a given word to a given word set.
 		// Returns true on success.
 		bool addWordToWordSet(int wordId, int wordSetId);
-
 		// Returns list of words from a given word set.
 		// @param[in] wordSetId - ID of word set whose words list we want to retrieve
 		// @return List of words contained in the word set.

@@ -50,7 +50,7 @@ void WordLearner::WordLearnerMainWindow::onCreateWord(const std::string& termA, 
     const int wordId = database.createWord(termA, termB, note);
     if (wordId < 0)
     {
-        WL_LOG_ERRORF("Failed to create new word.");
+        WL_LOG_ERRORF("Failed to create new word in database.");
         return;
     }
     // Add new word to selected word set
@@ -72,7 +72,7 @@ void WordLearner::WordLearnerMainWindow::onCreateWord(const std::string& termA, 
         WL_LOG_ERRORF("Cannot add new word to selected word set.");
     }
     // Update words list in UI so that it shows the new word
-    const std::vector<Word>& words = database.getWordsFromWordSet(wordSetId);
+    const std::vector<Word> words = database.getWordsFromWordSet(wordSetId);
     updateWordsListWidget(words);
 }
 
@@ -88,7 +88,16 @@ void WordLearner::WordLearnerMainWindow::onCreateWordSetButtonPressed()
 
 void WordLearner::WordLearnerMainWindow::onCreateWordSet(const std::string& name)
 {
-    qDebug() << "onCreateWordSet() <----------";
+    const int wordSetId = database.createWordSet(name);
+    // Create word set in database
+    if (wordSetId < 0)
+    {
+        WL_LOG_ERRORF("Failed to create new word set in database.");
+        return;
+    }
+    // Update word sets list in UI so that it shows the new word set
+    const std::vector<WordSet>& wordSets = database.getWordSets();
+    updateWordSetsListWidget(wordSets, wordSetId);
 }
 
 void WordLearner::WordLearnerMainWindow::createUi()
@@ -118,19 +127,8 @@ void WordLearner::WordLearnerMainWindow::createWordSetsUi()
     connect(ui.wordSetsListWidget, &QListWidget::itemSelectionChanged, this, &WordLearnerMainWindow::onWordSetChanged);
     // Retrieve word sets list from database
     const std::vector<WordSet>& wordSets = database.getWordSets();
-    // Create a list of string items, one for each word set
-    QStringList items(wordSets.size());
-    m_wordSetsListIds.clear();
-    for (int i = 0; i < wordSets.size(); ++i)
-    {
-        const WordSet& wordSet = wordSets[i];
-        const std::string wordSetView = (wordSet.id == 0) ? "*" : wordSet.name;
-        items[i] = QString(wordSetView.c_str());
-        // Add word set ID to word sets IDs list
-        m_wordSetsListIds.push_back(wordSet.id);
-    }
-    // Add items to list widget
-    ui.wordSetsListWidget->addItems(items);
+    // Fill list widget with word sets from database
+    updateWordSetsListWidget(wordSets);
     // Create button for adding word sets
     ui.createWordSetButton = new QPushButton("New");
     ui.wordSetsLayout->addWidget(ui.createWordSetButton);
@@ -170,6 +168,36 @@ void WordLearner::WordLearnerMainWindow::updateWordsListWidget(const std::vector
     }
     // Add items to list widget
     ui.wordsListWidget->addItems(items);
+}
+
+void WordLearner::WordLearnerMainWindow::updateWordSetsListWidget(const std::vector<WordSet>& wordSets, int selectedWordSetId)
+{
+    // Remove all previously added word sets
+    ui.wordSetsListWidget->clear();
+    m_wordSetsListIds.clear();
+    // Create a list of string items, one for each word set
+    QStringList items(wordSets.size());
+    int selectedWordSetIndex = -1;
+    for (int i = 0; i < wordSets.size(); ++i)
+    {
+        const WordSet& wordSet = wordSets[i];
+        const std::string wordSetView = (wordSet.id == 0) ? "*" : wordSet.name;
+        items[i] = QString(wordSetView.c_str());
+        // Add word set ID to word sets IDs list
+        m_wordSetsListIds.push_back(wordSet.id);
+        // Keep track of index of the word set that we want to be selected by default
+        if (wordSet.id == selectedWordSetId)
+        {
+            selectedWordSetIndex = i;
+        }
+    }
+    // Add items to list widget
+    ui.wordSetsListWidget->addItems(items);
+    // Select word set that should be selected by default
+    if (selectedWordSetIndex >= 0)
+    {
+        ui.wordSetsListWidget->setCurrentRow(selectedWordSetIndex);
+    }
 }
 
 int WordLearner::WordLearnerMainWindow::getSelectedWordSetId() const

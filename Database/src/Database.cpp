@@ -51,6 +51,21 @@ namespace WordLearner {
 		return word.id;
 	}
 
+	int Database::createWordSet(const std::string& name)
+	{
+		// Construct WordSet object with given name
+		WordSet wordSet;
+		wordSet.name = name;
+		// Generate a new ID for the word set
+		wordSet.id = getNewId();
+		// Add new word set to database
+		if (!addWordSet(wordSet))
+		{
+			return -1;
+		}
+		return wordSet.id;
+	}
+
 	bool Database::addWordToWordSet(int wordId, int wordSetId)
 	{
 		// Check if word exists

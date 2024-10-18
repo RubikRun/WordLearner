@@ -53,6 +53,9 @@ namespace WordLearner
 
         // Updates words list widget to contain the given list of words. Removes all previously added words.
         void updateWordsListWidget(const std::vector<Word>& words);
+        // Updates word sets list widget to contain the given list of word sets. Removes all previously added word sets.
+        // Optionally, you can provide ID of the word set to be selected by default, at the beginning before any user interaction.
+        void updateWordSetsListWidget(const std::vector<WordSet>& wordSets, int selectedWordSetId = -1);
 
         // Returns ID of word set currently selected in UI
         int getSelectedWordSetId() const;
