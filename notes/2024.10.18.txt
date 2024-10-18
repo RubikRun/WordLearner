@@ -84,3 +84,36 @@ Yep, it works.
 Okay, it's ready.
 Items are editable now, and we have a slot that's called when an item is edited in UI.
 Let's commit.
+
+Now let's handle the actual editing of a word set when it happens.
+First we need to convert the QListWidgetItem* to an index
+and convert that index to an ID of a word set.
+We have the new name that the word set should take.
+We only need to have an API in Database for updating a word set's name.
+So let's create this new function in Database
+    bool editWordSet(int wordSetId, const std::string& newName);
+It will only set the new name to the word set,
+and first change if it's a valid name.
+The only validity condition is that the name is not empty.
+
+It kinda works,
+but I noticed something annoying.
+When user edits a word set in UI then word set gots deselected
+and in fact there is no word set selected.
+On the right the words of the edited word set remain to be shown, which is correct,
+but the edited word set is not selected on the left.
+So I want this function
+    updateWordSetsListWidget()
+to keep the selected word set if it's still there.
+It'd be best that this happens by ID,
+so that in the future if word sets get displaced (for example when you delete a word set)
+we would want the word set with the same ID to remain selected,
+not with the same index in list.
+So let's see how to do that.
+Okay, it's actually easier than I thought, we already handle the parameter selectedWordSetId,
+so we can just set it to be the selected word set's ID, if that parameter was negative in the first place,
+meaning that caller did not intend to have a specific word set selected.
+Okay, done. Let's test.
+It works.
+Editing of word sets in UI, now works.
+Let's commit.

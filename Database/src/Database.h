@@ -36,6 +36,10 @@ namespace WordLearner {
 		// Returns created word set's ID.
 		int createWordSet(const std::string& name);
 
+		// Edits a word set by setting it a given new name.
+		// Returns true on success.
+		bool editWordSet(int wordSetId, const std::string& newName);
+
 		// Adds a given word to a given word set.
 		// Returns true on success.
 		bool addWordToWordSet(int wordId, int wordSetId);

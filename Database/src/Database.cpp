@@ -66,6 +66,26 @@ namespace WordLearner {
 		return wordSet.id;
 	}
 
+	bool Database::editWordSet(int wordSetId, const std::string& newName)
+	{
+		// Get word set
+		WordSet* wordSet = findWordSet(wordSetId);
+		if (wordSet == nullptr)
+		{
+			WL_LOG_ERRORF("Trying to edit a non-existing word set with ID = " << wordSetId);
+			return false;
+		}
+		// Check if new name is valid, non-empty.
+		if (newName.empty())
+		{
+			WL_LOG_ERRORF("Trying to edit a word set with ID = " << wordSetId << " and set an empty name");
+			return false;
+		}
+		// Set new name to word set
+		wordSet->name = newName;
+		return true;
+	}
+
 	bool Database::addWordToWordSet(int wordId, int wordSetId)
 	{
 		// Check if word exists
