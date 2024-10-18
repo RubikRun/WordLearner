@@ -115,6 +115,9 @@ void WordLearner::WordLearnerMainWindow::createWordSetsUi()
     }
     // Add items to list widget
     ui.wordSetsListWidget->addItems(items);
+    // Create button for adding word sets
+    ui.createWordSetButton = new QPushButton("New");
+    ui.wordSetsLayout->addWidget(ui.createWordSetButton);
 }
 
 void WordLearner::WordLearnerMainWindow::createWordsUi()

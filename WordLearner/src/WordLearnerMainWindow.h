@@ -63,6 +63,8 @@ namespace WordLearner
             QVBoxLayout* wordSetsLayout = nullptr;
             // List widget for showing a list of word sets
             QListWidget* wordSetsListWidget = nullptr;
+            // Button for creating a new word set
+            QPushButton* createWordSetButton = nullptr;
             // Layout for words
             QVBoxLayout* wordsLayout = nullptr;
             // List widget for showing a list of words

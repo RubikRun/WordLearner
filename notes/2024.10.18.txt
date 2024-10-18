@@ -4,5 +4,11 @@ I tested it by adding 2 words in each word set,
 closing the application,
 confirming that .data files are updated,
 opening the application again to confirm that new words will be loaded correctly.
-So it's ready. Let's commit.
+So it's ready. Adding a new word is fully ready.
+Let's commit.
 
+
+Now let's continue with implementing adding a new word set.
+Hopefully it will be similar, but simpler since a word set doesn't have any other object containing it.
+Start by adding another "New" button, this time under word sets list widget.
+Done, easy, looks good.
