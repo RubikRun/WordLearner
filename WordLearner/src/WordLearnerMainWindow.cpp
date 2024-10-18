@@ -26,6 +26,7 @@ void WordLearnerMainWindow::onWordSetSelectionChanged()
     const int wordSetId = getSelectedWordSetId();
     if (wordSetId < 0)
     {
+        WL_LOG_ERRORF("Trying to show words of selected word set, but cannot find ID of that word set.");
         return;
     }
     // Get words from selected word set
@@ -64,7 +65,7 @@ void WordLearner::WordLearnerMainWindow::onCreateWord(const std::string& termA, 
     }
     if (wordSetId < 0)
     {
-        WL_LOG_ERRORF("Trying to add new word to selected word set, but selected word set is invalid.");
+        WL_LOG_ERRORF("Trying to add new word to selected word set, but there is no selected word set.");
         return;
     }
     if (!database.addWordToWordSet(wordId, wordSetId))
@@ -102,7 +103,29 @@ void WordLearner::WordLearnerMainWindow::onCreateWordSet(const std::string& name
 
 void WordLearner::WordLearnerMainWindow::onWordSetEdited(QListWidgetItem* item)
 {
-    qDebug() << "onWordSetEdited() " << item->text();
+    // Get index of edited word set
+    const int wordSetIndex = ui.wordSetsListWidget->row(item);
+    // Get ID of edited word set
+    if (wordSetIndex < 0 || wordSetIndex >= m_wordSetsListIds.size())
+    {
+        WL_LOG_ERRORF("Cannot get ID of edited word set, index out of range.");
+        return;
+    }
+    const int wordSetId = m_wordSetsListIds[wordSetIndex];
+    // Get new name for word set, entered by user
+    const std::string newName = item->text().toStdString();
+    // Edit word set in database, set it its new name
+    if (!database.editWordSet(wordSetId, newName))
+    {
+        WL_LOG_ERRORF("Failed to edit word set in database.");
+    }
+    // Update word sets list in UI.
+    // When user edited word set's name in UI, that new name will be shown there without us doing anything,
+    // but in case word set failed to update in database,
+    // we would want to show the old name in UI, to indicate to user that the name they entered did not succeed.
+    // In both cases, we just want UI to contain the current names of word sets from database, so just do update here.
+    const std::vector<WordSet>& wordSets = database.getWordSets();
+    updateWordSetsListWidget(wordSets);
 }
 
 void WordLearner::WordLearnerMainWindow::createUi()
@@ -181,6 +204,13 @@ void WordLearner::WordLearnerMainWindow::updateWordSetsListWidget(const std::vec
     // we want it to be called only when user edits items in UI.
     disconnect(ui.wordSetsListWidget, &QListWidget::itemChanged, this, &WordLearnerMainWindow::onWordSetEdited);
 
+    // If no default selected word set ID is provided,
+    // we would want the currently selected word set to remain selected after the update
+    if (selectedWordSetId < 0)
+    {
+        selectedWordSetId = getSelectedWordSetId();
+    }
+
     // Remove all previously added word sets
     ui.wordSetsListWidget->clear();
     m_wordSetsListIds.clear();
@@ -219,7 +249,6 @@ int WordLearner::WordLearnerMainWindow::getSelectedWordSetId() const
     // Get ID of selected word set
     if (wordSetIdx < 0 || wordSetIdx >= m_wordSetsListIds.size())
     {
-        WL_LOG_ERRORF("Cannot get ID of selected word set, index out of range.");
         return -1;
     }
     return m_wordSetsListIds[wordSetIdx];
