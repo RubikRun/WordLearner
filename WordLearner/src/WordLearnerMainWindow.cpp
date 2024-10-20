@@ -7,6 +7,8 @@
 #include "CreateWordDialog.h"
 #include "CreateWordSetDialog.h"
 
+#include <QHeaderView>
+
 using namespace WordLearner;
 
 WordLearnerMainWindow::WordLearnerMainWindow(Database& database, QWidget *parent)
@@ -32,7 +34,7 @@ void WordLearnerMainWindow::onWordSetSelectionChanged()
     // Get words from selected word set
     const std::vector<Word> words = database.getWordsFromWordSet(wordSetId);
     // Update words list widget with words from set
-    updateWordsListWidget(words);
+    updateWordsTableWidget(words);
 }
 
 void WordLearner::WordLearnerMainWindow::onCreateWordButtonPressed()
@@ -74,7 +76,7 @@ void WordLearner::WordLearnerMainWindow::onCreateWord(const std::string& termA, 
     }
     // Update words list in UI so that it shows the new word
     const std::vector<Word> words = database.getWordsFromWordSet(wordSetId);
-    updateWordsListWidget(words);
+    updateWordsTableWidget(words);
 }
 
 void WordLearner::WordLearnerMainWindow::onCreateWordSetButtonPressed()
@@ -165,32 +167,42 @@ void WordLearner::WordLearnerMainWindow::createWordSetsUi()
 
 void WordLearner::WordLearnerMainWindow::createWordsUi()
 {
-    // Create list widget
-    ui.wordsListWidget = new QListWidget;
-    ui.wordsListWidget->setStyleSheet(ResourceManager::getListWidgetStylesheet().c_str());
-    ui.wordsLayout->addWidget(ui.wordsListWidget);
+    // Create table widgeet
+    ui.wordsTableWidget = new QTableWidget;
+    ui.wordsTableWidget->setColumnCount(2);
+    ui.wordsTableWidget->setStyleSheet(ResourceManager::getTableWidgetStylesheet().c_str());
+    ui.wordsTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    // TODO: get names of languages from database
+    ui.wordsTableWidget->setHorizontalHeaderLabels({ "Espanol", "Bulgarski" });
+    ui.wordsLayout->addWidget(ui.wordsTableWidget);
     // Retrieve words list from database
     const std::vector<Word>& words = database.getWords();
-    // Fill list widget with words from database
-    updateWordsListWidget(words);
+    // Fill table widget with words from database
+    updateWordsTableWidget(words);
     // Create button for adding words
     ui.createWordButton = new QPushButton("New");
     ui.wordsLayout->addWidget(ui.createWordButton);
     connect(ui.createWordButton, &QPushButton::released, this, &WordLearnerMainWindow::onCreateWordButtonPressed);
 }
 
-void WordLearner::WordLearnerMainWindow::updateWordsListWidget(const std::vector<Word>& words)
+void WordLearner::WordLearnerMainWindow::updateWordsTableWidget(const std::vector<Word>& words)
 {
     // Remove all previously added words
-    ui.wordsListWidget->clear();
+    ui.wordsTableWidget->clearContents();
     m_wordsListIds.clear();
-    // Fill list widget with items, one for each word
+    // Fill table widget with rows, one for each word
+    ui.wordsTableWidget->setRowCount(int(words.size()));
     for (int i = 0; i < words.size(); ++i)
     {
         const Word& word = words[i];
-        // Create an item from word, and add it to list widget
-        const std::string wordView = word.termA + "  -  " + word.termB;
-        QListWidgetItem* item = new QListWidgetItem(QString(wordView.c_str()), ui.wordsListWidget);
+        // Set columns of table's current row to be the word's term A, term B and note
+        QTableWidgetItem* itemTermA = new QTableWidgetItem(QString(word.termA.c_str()));
+        QTableWidgetItem* itemTermB = new QTableWidgetItem(QString(word.termB.c_str()));
+        // TODO: Making items non-editable for now, until I implement editing of words.
+        itemTermA->setFlags(itemTermA->flags() & ~Qt::ItemIsEditable);
+        itemTermB->setFlags(itemTermB->flags() & ~Qt::ItemIsEditable);
+        ui.wordsTableWidget->setItem(i, 0, itemTermA);
+        ui.wordsTableWidget->setItem(i, 1, itemTermB);
         // Add word ID to words IDs list
         m_wordsListIds.push_back(word.id);
     }

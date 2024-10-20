@@ -1,0 +1,15 @@
+QTableWidget {
+    font-size: 20px;
+}
+
+QTableWidget::item {
+    border: 1px solid #a5a5a5;
+}
+
+QTableWidget::item:hover {
+    background-color: #373737;
+}
+
+QTableWidget::item:selected {
+    background-color: #181818;
+}
