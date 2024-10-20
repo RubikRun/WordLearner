@@ -3,6 +3,7 @@
 #include <QtWidgets/QMainWindow>
 
 #include <QtWidgets/QListWidget>
+#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QPushButton>
@@ -54,8 +55,8 @@ namespace WordLearner
         // Creates the UI elements for words
         void createWordsUi();
 
-        // Updates words list widget to contain the given list of words. Removes all previously added words.
-        void updateWordsListWidget(const std::vector<Word>& words);
+        // Updates words table widget to contain the given list of words. Removes all previously added words.
+        void updateWordsTableWidget(const std::vector<Word>& words);
         // Updates word sets list widget to contain the given list of word sets. Removes all previously added word sets.
         // Keeps the currently selected word set selected after the update.
         // Optionally, you can provide ID of the word set to be selected.
@@ -79,8 +80,8 @@ namespace WordLearner
             QPushButton* createWordSetButton = nullptr;
             // Layout for words
             QVBoxLayout* wordsLayout = nullptr;
-            // List widget for showing a list of words
-            QListWidget* wordsListWidget = nullptr;
+            // Table widget for showing a list of words
+            QTableWidget* wordsTableWidget = nullptr;
             // Button for creating a new word
             QPushButton* createWordButton = nullptr;
         } ui;

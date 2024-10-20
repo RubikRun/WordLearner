@@ -1,0 +1,44 @@
+20.10.2024
+0:00
+
+Last time I finished implementing editing of word sets.
+Today let's begin implementing editing of words.
+With the current design, there are 2 options
+1. Allow user to edit words directly in the words list widget.
+    This is not very nice because user will have to manually keep track of
+    the format of the edited word.
+    For example if an item in the words list widget looks like this
+        la manzana - apple
+    And user wants to edit the english word apple to be the bulgarian word qbalka,
+    they would have to write this exact string
+        la manzana - qbalka
+    Other formats will not be accepted, for example
+        la manzana = qbalka
+        la manzana-qbalka
+        la manzana -> qbalka
+    or we would have to do some smart parsing of their edited string.
+    But that's not nice
+2. When user double clicks on a word in the words list widget
+    open up a dialog that is specifically for editing a word.
+    That dialog would have word's term A and term B in separate line edits
+    so that user can edit them separately and not rely on a specific formatting.
+    That's okay, but still it begs the question
+Why are we even showing the word in a single string
+with some arbitrary formatting instead of having different columns for the word's properties.
+If we have different columns
+then we can just allow user to edit each column separately
+and that's the best of both words, best of option 1 and option 2,
+and it makes more sense.
+
+So let's do that.
+Let's change our current UI so that the words list widget
+contains 2 or 3 columns for the word's properties.
+In Qt QListWidgets actually don't support multiple columns,
+so it would have to be a QTableWidget.
+
+TODO: Create a new .data file that will contain name of language A and name of language B,
+    load it in Database,
+    and those names for the columns of the words table widget.
+
+Okay done, words are now displayed in a QTableWidget with 2 columns.
+Next time continue with the actual editing of words.

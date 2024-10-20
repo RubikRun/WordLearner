@@ -16,6 +16,9 @@ namespace WordLearner
 		// Returns the CSS stylesheet used for list widgets
 		const std::string& getListWidgetStylesheet();
 
+		// Returns the CSS stylesheet used for table widgets
+		const std::string& getTableWidgetStylesheet();
+
 	};
 
 } // namespace WordLearner
