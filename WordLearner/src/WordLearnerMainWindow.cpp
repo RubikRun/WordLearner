@@ -130,6 +130,18 @@ void WordLearner::WordLearnerMainWindow::onWordSetEdited(QListWidgetItem* item)
     updateWordSetsListWidget(wordSets);
 }
 
+void WordLearner::WordLearnerMainWindow::onWordEdited(int row, int col)
+{
+    QTableWidgetItem* tableItem = ui.wordsTableWidget->item(row, col);
+    if (!tableItem)
+    {
+        WL_LOG_ERRORF("User edited an invalid cell of the words table, out of bounds.");
+        return;
+    }
+    const std::string text = tableItem->text().toStdString();
+    qDebug() << "onWordEdited() " << text;
+}
+
 void WordLearner::WordLearnerMainWindow::createUi()
 {
     // Create central widget
@@ -187,6 +199,12 @@ void WordLearner::WordLearnerMainWindow::createWordsUi()
 
 void WordLearner::WordLearnerMainWindow::updateWordsTableWidget(const std::vector<Word>& words)
 {
+    // Temporarily disconnect words table widget's cellChanged() signal
+    // for the duration of this function, while we are filling cells,
+    // because we don't want the slot to be called each time when we fill a cell here,
+    // we want it to be called only when user edits cells in UI.
+    disconnect(ui.wordsTableWidget, &QTableWidget::cellChanged, this, &WordLearnerMainWindow::onWordEdited);
+
     // Remove all previously added words
     ui.wordsTableWidget->clearContents();
     m_wordsListIds.clear();
@@ -198,14 +216,14 @@ void WordLearner::WordLearnerMainWindow::updateWordsTableWidget(const std::vecto
         // Set columns of table's current row to be the word's term A, term B and note
         QTableWidgetItem* itemTermA = new QTableWidgetItem(QString(word.termA.c_str()));
         QTableWidgetItem* itemTermB = new QTableWidgetItem(QString(word.termB.c_str()));
-        // TODO: Making items non-editable for now, until I implement editing of words.
-        itemTermA->setFlags(itemTermA->flags() & ~Qt::ItemIsEditable);
-        itemTermB->setFlags(itemTermB->flags() & ~Qt::ItemIsEditable);
         ui.wordsTableWidget->setItem(i, 0, itemTermA);
         ui.wordsTableWidget->setItem(i, 1, itemTermB);
         // Add word ID to words IDs list
         m_wordsListIds.push_back(word.id);
     }
+
+    // Connect words table widget's cellChanged() signal to our custom slot onWordEdited
+    connect(ui.wordsTableWidget, &QTableWidget::cellChanged, this, &WordLearnerMainWindow::onWordEdited);
 }
 
 void WordLearner::WordLearnerMainWindow::updateWordSetsListWidget(const std::vector<WordSet>& wordSets, int selectedWordSetId)

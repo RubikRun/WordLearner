@@ -1,0 +1,9 @@
+Last time I started implementing editing of words,
+but first I had to make words be displayed in a table instead of a single list.
+That's ready and now I can continue with the actual editing of words.
+
+First, make table's cells be editable (I made them non-editable last time, for consistency)
+
+Now let's create a slot that will be called when a cell is edited, similar to
+    onWordSetEdited()
+but for the table.

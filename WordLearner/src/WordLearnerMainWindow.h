@@ -42,8 +42,10 @@ namespace WordLearner
         // It's called with the new word set's data.
         void onCreateWordSet(const std::string& name);
 
-        // Slot that's called when a word set is edited in UI.
+        // Slot that's called when a word set is edited in UI
         void onWordSetEdited(QListWidgetItem* item);
+        // Slot that's called when a word is edited in UI
+        void onWordEdited(int row, int col);
 
     private: /* functions */
 
