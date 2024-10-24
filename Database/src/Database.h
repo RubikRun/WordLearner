@@ -38,7 +38,16 @@ namespace WordLearner {
 
 		// Edits a word set by setting it a given new name.
 		// Returns true on success.
-		bool editWordSet(int wordSetId, const std::string& newName);
+		bool editWordSetName(int wordSetId, const std::string& newName);
+		// Edits a word by setting it a given new term A.
+		// Returns true on success.
+		bool editWordTermA(int wordId, const std::string& newTermA);
+		// Edits a word by setting it a given new term B.
+		// Returns true on success.
+		bool editWordTermB(int wordId, const std::string& newTermB);
+		// Edits a word by setting it a given new note.
+		// Returns true on success.
+		bool editWordNote(int wordId, const std::string& newNote);
 
 		// Adds a given word to a given word set.
 		// Returns true on success.

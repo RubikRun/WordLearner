@@ -7,3 +7,22 @@ First, make table's cells be editable (I made them non-editable last time, for c
 Now let's create a slot that will be called when a cell is edited, similar to
     onWordSetEdited()
 but for the table.
+
+Next, we will need some API in Database for editing a word, similar to
+    editWordSet()
+but for words.
+There are 2 options here.
+1. We can have a single function that takes in all properties of a word
+   and overwrites the old ones.
+2. We can have multiple functions, one for each property of a word,
+   and each function will edit exactly one property.
+Option 2 makes more sense for the current use case.
+So let's add these 3 functions to Database
+    bool editWordTermA(int wordId, const std::string& newTermA);
+    bool editWordTermB(int wordId, const std::string& newTermB);
+    bool editWordNote(int wordId, const std::string& newNote);
+and rename the old
+    editWordSet()
+to
+    editWordSetName()
+for consistency.

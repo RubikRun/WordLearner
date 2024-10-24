@@ -66,23 +66,83 @@ namespace WordLearner {
 		return wordSet.id;
 	}
 
-	bool Database::editWordSet(int wordSetId, const std::string& newName)
+	bool Database::editWordSetName(int wordSetId, const std::string& newName)
 	{
 		// Get word set
 		WordSet* wordSet = findWordSet(wordSetId);
 		if (wordSet == nullptr)
 		{
-			WL_LOG_ERRORF("Trying to edit a non-existing word set with ID = " << wordSetId);
+			WL_LOG_ERRORF("Trying to edit (set new name) a non-existing word set with ID = " << wordSetId);
 			return false;
 		}
 		// Check if new name is valid, non-empty.
 		if (newName.empty())
 		{
-			WL_LOG_ERRORF("Trying to edit a word set with ID = " << wordSetId << " and set an empty name");
+			WL_LOG_ERRORF("Trying to edit (set new name) a word set with ID = " << wordSetId << " and set an empty name");
 			return false;
 		}
 		// Set new name to word set
 		wordSet->name = newName;
+		return true;
+	}
+
+	bool Database::editWordTermA(int wordId, const std::string& newTermA)
+	{
+		// Get word
+		Word* word = findWord(wordId);
+		if (word == nullptr)
+		{
+			WL_LOG_ERRORF("Trying to edit (set new term A) a non-existing word with ID = " << wordId);
+			return false;
+		}
+		// Check if new term A is valid, non-empty.
+		if (newTermA.empty())
+		{
+			WL_LOG_ERRORF("Trying to edit (set new term A) a word with ID = " << wordId << " and set an empty term A");
+			return false;
+		}
+		// Set new term A to word
+		word->termA = newTermA;
+		return true;
+	}
+
+	bool Database::editWordTermB(int wordId, const std::string& newTermB)
+	{
+		// Get word
+		Word* word = findWord(wordId);
+		if (word == nullptr)
+		{
+			WL_LOG_ERRORF("Trying to edit (set new term B) a non-existing word with ID = " << wordId);
+			return false;
+		}
+		// Check if new term B is valid, non-empty.
+		if (newTermB.empty())
+		{
+			WL_LOG_ERRORF("Trying to edit (set new term B) a word with ID = " << wordId << " and set an empty term B");
+			return false;
+		}
+		// Set new term B to word
+		word->termB = newTermB;
+		return true;
+	}
+
+	bool Database::editWordNote(int wordId, const std::string& newNote)
+	{
+		// Get word
+		Word* word = findWord(wordId);
+		if (word == nullptr)
+		{
+			WL_LOG_ERRORF("Trying to edit (set new note) a non-existing word with ID = " << wordId);
+			return false;
+		}
+		// Check if new note is valid, non-empty.
+		if (newNote.empty())
+		{
+			WL_LOG_ERRORF("Trying to edit (set new note) a word with ID = " << wordId << " and set an empty note");
+			return false;
+		}
+		// Set new note to word
+		word->note = newNote;
 		return true;
 	}
 

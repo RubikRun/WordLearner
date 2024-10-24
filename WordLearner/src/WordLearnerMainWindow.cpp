@@ -117,7 +117,7 @@ void WordLearner::WordLearnerMainWindow::onWordSetEdited(QListWidgetItem* item)
     // Get new name for word set, entered by user
     const std::string newName = item->text().toStdString();
     // Edit word set in database, set it its new name
-    if (!database.editWordSet(wordSetId, newName))
+    if (!database.editWordSetName(wordSetId, newName))
     {
         WL_LOG_ERRORF("Failed to edit word set in database.");
     }
