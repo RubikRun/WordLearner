@@ -1,3 +1,10 @@
 I now finished the editing of words by calling the new Database API in the new UI slot.
 Tested it. It works.
 Editing of words is ready now.
+
+I found a bug. When user adds a word to global word set,
+it is added to database but not shown in UI (UI is not updated).
+Let's fix that now.
+Done.
+
+TODO: Print an INFO message when user tries to rename the global word set.

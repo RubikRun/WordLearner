@@ -56,21 +56,18 @@ void WordLearner::WordLearnerMainWindow::onCreateWord(const std::string& termA, 
         WL_LOG_ERRORF("Failed to create new word in database.");
         return;
     }
-    // Add new word to selected word set
+    // Get selected word set's ID
     const int wordSetId = getSelectedWordSetId();
-    if (wordSetId == 0)
-    {
-        // If selected word set is the global word set,
-        // we don't need to explicitly add new word to it,
-        // because it's automatically added when created.
-        return;
-    }
     if (wordSetId < 0)
     {
         WL_LOG_ERRORF("Trying to add new word to selected word set, but there is no selected word set.");
         return;
     }
-    if (!database.addWordToWordSet(wordId, wordSetId))
+    // Add new word to selected word set.
+    // If selected word set is the global word set,
+    // we don't need to explicitly add new word to it,
+    // because it's automatically added when created.
+    if (wordSetId != 0 && !database.addWordToWordSet(wordId, wordSetId))
     {
         WL_LOG_ERRORF("Cannot add new word to selected word set.");
     }
