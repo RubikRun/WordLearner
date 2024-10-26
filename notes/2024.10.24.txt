@@ -26,3 +26,5 @@ and rename the old
 to
     editWordSetName()
 for consistency.
+
+And finally, we can edit the word by calling the new Database API in the new slot.

@@ -110,16 +110,16 @@ void WordLearner::WordLearnerMainWindow::onWordSetEdited(QListWidgetItem* item)
     // Get ID of edited word set
     if (wordSetIndex < 0 || wordSetIndex >= m_wordSetsListIds.size())
     {
-        WL_LOG_ERRORF("Cannot get ID of edited word set, index out of range.");
+        WL_LOG_ERRORF("Cannot get ID of edited word set, row out of range.");
         return;
     }
     const int wordSetId = m_wordSetsListIds[wordSetIndex];
     // Get new name for word set, entered by user
     const std::string newName = item->text().toStdString();
-    // Edit word set in database, set it its new name
+    // Edit word set's name in database
     if (!database.editWordSetName(wordSetId, newName))
     {
-        WL_LOG_ERRORF("Failed to edit word set in database.");
+        WL_LOG_ERRORF("Failed to edit word set's name in database.");
     }
     // Update word sets list in UI.
     // When user edited word set's name in UI, that new name will be shown there without us doing anything,
@@ -138,8 +138,47 @@ void WordLearner::WordLearnerMainWindow::onWordEdited(int row, int col)
         WL_LOG_ERRORF("User edited an invalid cell of the words table, out of bounds.");
         return;
     }
-    const std::string text = tableItem->text().toStdString();
-    qDebug() << "onWordEdited() " << text;
+    // Get the new string value that user has entered
+    const std::string editedStr = tableItem->text().toStdString();
+    // Get ID of edited word
+    if (row < 0 || row >= m_wordsListIds.size())
+    {
+        WL_LOG_ERRORF("Cannot get ID of edited word, row out of range.");
+        return;
+    }
+    const int wordId = m_wordsListIds[row];
+    // If user has edited word's term A
+    if (col == 0)
+    {
+        // Edit word's term A in database
+        if (!database.editWordTermA(wordId, editedStr))
+        {
+            WL_LOG_ERRORF("Failed to edit word's term A in database.");
+        }
+    }
+    // If user has edited word's term B
+    else if (col == 1)
+    {
+        // Edit word's term B in database
+
+        if (!database.editWordTermB(wordId, editedStr))
+        {
+            WL_LOG_ERRORF("Failed to edit word's term B in database.");
+        }
+    }
+    else
+    {
+        WL_LOG_ERRORF("User edited an invalid cell of the words table, column out of bounds.");
+        return;
+    }
+    // Update words table in UI with the words of the currently selected word set.
+    // When user edited some word's property in UI, that new property will be shown there without us doing anything,
+    // but in case word failed to update in database,
+    // we would want to show the old property in UI, to indicate to user that the property they entered did not succeed.
+    // In both cases, we just want UI to contain the current properties of words from database, so just do update here.
+    const int selectedWordSetId = getSelectedWordSetId();
+    const std::vector<Word>& words = database.getWordsFromWordSet(selectedWordSetId);
+    updateWordsTableWidget(words);
 }
 
 void WordLearner::WordLearnerMainWindow::createUi()

@@ -1,0 +1,3 @@
+I now finished the editing of words by calling the new Database API in the new UI slot.
+Tested it. It works.
+Editing of words is ready now.
