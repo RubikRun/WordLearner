@@ -40,7 +40,7 @@ void WordLearnerMainWindow::onWordSetSelectionChanged()
 void WordLearner::WordLearnerMainWindow::onCreateWordButtonPressed()
 {
     // Create dialog for creating a new word
-    CreateWordDialog createWordDialog(this);
+    CreateWordDialog createWordDialog(database.getLanguageA(), database.getLanguageB(), this);
     // Connect dialog's createWord() signal to our onCreateWord() slot here
     connect(&createWordDialog, &CreateWordDialog::createWord, this, &WordLearnerMainWindow::onCreateWord);
     // Open dialog
@@ -220,8 +220,10 @@ void WordLearner::WordLearnerMainWindow::createWordsUi()
     ui.wordsTableWidget->setColumnCount(2);
     ui.wordsTableWidget->setStyleSheet(ResourceManager::getTableWidgetStylesheet().c_str());
     ui.wordsTableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    // TODO: get names of languages from database
-    ui.wordsTableWidget->setHorizontalHeaderLabels({ "Espanol", "Bulgarski" });
+    ui.wordsTableWidget->setHorizontalHeaderLabels({
+        QString(database.getLanguageA().c_str()),
+        QString(database.getLanguageB().c_str())
+    });
     ui.wordsLayout->addWidget(ui.wordsTableWidget);
     // Retrieve words list from database
     const std::vector<Word>& words = database.getWords();

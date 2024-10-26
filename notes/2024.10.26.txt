@@ -8,3 +8,25 @@ Let's fix that now.
 Done.
 
 DONE: Print an ERROR message when user tries to rename the global word set.
+
+Now let's do this old TO-DO
+TO-DO: Create a new .data file that will contain name of language A and name of language B,
+    load it in Database,
+    and those names for the columns of the words table widget.
+By the way, those names of language A and language B can also be used in CreateWordDialog.
+
+Start by creating the .data file.
+    languages.data
+and let's just have 2 lines containing the 2 language names.
+Then load the 2 languages in Database into these 2 new member variables
+    std::string m_languageA;
+    std::string m_languageB;
+with a new function
+    void loadLanguages(const std::string& dataFilepath);
+that is called from
+    loadDatabase()
+Then we will need getters for the 2 languages
+    std::string getLanguageA() const;
+    std::string getLanguageB() const;
+And finally we can use those 2 languages in UI.
+Done. It works.

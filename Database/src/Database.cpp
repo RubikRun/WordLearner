@@ -8,7 +8,7 @@
 
 #include "Logger.hpp"
 
-static bool DO_DEBUG_DATABASE = true;
+static bool DO_LOG_LOADED_DATA = true;
 
 namespace WordLearner {
 
@@ -17,6 +17,7 @@ namespace WordLearner {
 		loadSeparators();
 		loadWords("Database/data/words.data");
 		loadWordSets("Database/data/word_sets.data");
+		loadLanguages("Database/data/languages.data");
 	}
 
 	void Database::exportDatabase()
@@ -311,7 +312,7 @@ namespace WordLearner {
 		}
 		// Log info about loaded words
 		WL_LOG_INFOF("Successfully loaded " << wordsProcessed << " words.");
-		if (DO_DEBUG_DATABASE)
+		if (DO_LOG_LOADED_DATA)
 		{
 			printWords();
 		}
@@ -394,7 +395,7 @@ namespace WordLearner {
 		}
 		// Log info about loaded word sets
 		WL_LOG_INFOF("Successfully loaded " << wordSetsProcessed << " word sets.");
-		if (DO_DEBUG_DATABASE)
+		if (DO_LOG_LOADED_DATA)
 		{
 			printWordSets();
 		}
@@ -408,6 +409,44 @@ namespace WordLearner {
 		if (dataFile.is_open())
 		{
 			WL_LOG_ERRORF("Cannot close word sets data file after load.");
+		}
+	}
+
+	void Database::loadLanguages(const std::string& dataFilepath)
+	{
+		// Open data file with an input stream
+		std::ifstream dataFile(dataFilepath);
+		if (!dataFile.is_open())
+		{
+			WL_LOG_ERRORF("Cannot open languages data file for load.");
+			return;
+		}
+		// Read first line which is language A
+		if (!std::getline(dataFile, m_languageA))
+		{
+			WL_LOG_ERRORF("Missing language A in languages data file.");
+			return;
+		}
+		// Read second line which is language B
+		if (!std::getline(dataFile, m_languageB))
+		{
+			WL_LOG_ERRORF("Missing language B in languages data file.");
+			return;
+		}
+		// Log info about loaded languages
+		if (DO_LOG_LOADED_DATA)
+		{
+			WL_LOG_INFOF("Successfully loaded languages: " << m_languageA << " and " << m_languageB);
+		}
+		else
+		{
+			WL_LOG_INFOF("Successfully loaded languages.");
+		}
+		// Close data file stream
+		dataFile.close();
+		if (dataFile.is_open())
+		{
+			WL_LOG_ERRORF("Cannot close languages data file after load.");
 		}
 	}
 

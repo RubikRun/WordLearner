@@ -2,12 +2,12 @@
 
 using namespace WordLearner;
 
-CreateWordDialog::CreateWordDialog(QWidget* parent)
+CreateWordDialog::CreateWordDialog(const std::string languageA, const std::string languageB, QWidget* parent)
     : QDialog(parent)
 {
     setWindowTitle("Create new word");
     setMinimumSize(300, 200);
-    createUi();
+    createUi(languageA, languageB);
 }
 
 void CreateWordDialog::onCreateWordButtonClicked() {
@@ -21,18 +21,18 @@ void CreateWordDialog::onCreateWordButtonClicked() {
     accept();
 }
 
-void WordLearner::CreateWordDialog::createUi()
+void WordLearner::CreateWordDialog::createUi(const std::string languageA, const std::string languageB)
 {
     // Create layout
     ui.layout = new QVBoxLayout;
     setLayout(ui.layout);
     // Create a label and a line edit for term A
-    ui.termALabel = new QLabel("Word in language A", this);
+    ui.termALabel = new QLabel((std::string("Word in ") + languageA).c_str(), this);
     ui.termALineEdit = new QLineEdit(this);
     ui.layout->addWidget(ui.termALabel);
     ui.layout->addWidget(ui.termALineEdit);
     // Create a label and a line edit for term B
-    ui.termBLabel = new QLabel("Word in language B", this);
+    ui.termBLabel = new QLabel((std::string("Word in ") + languageB).c_str(), this);
     ui.termBLineEdit = new QLineEdit(this);
     ui.layout->addWidget(ui.termBLabel);
     ui.layout->addWidget(ui.termBLineEdit);

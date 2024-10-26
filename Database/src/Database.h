@@ -27,6 +27,16 @@ namespace WordLearner {
 		{
 			return m_wordSets;
 		}
+		// Returns name of language A
+		std::string getLanguageA() const
+		{
+			return m_languageA;
+		}
+		// Returns name of language B
+		std::string getLanguageB() const
+		{
+			return m_languageB;
+		}
 
 		// Creates a new word in database from given data.
 		// Adds new word to global word set.
@@ -70,6 +80,8 @@ namespace WordLearner {
 		void loadWords(const std::string& dataFilepath);
 		// Loads word sets from a given .data file
 		void loadWordSets(const std::string& dataFilepath);
+		// Loads languages from a given .data file
+		void loadLanguages(const std::string& dataFilepath);
 		// Loads database's separators from their .data file
 		void loadSeparators();
 
@@ -129,6 +141,10 @@ namespace WordLearner {
 		std::vector<Word> m_words;
 		// A list of all word sets in the database
 		std::vector<WordSet> m_wordSets;
+		// Name of language A
+		std::string m_languageA;
+		// Name of language B
+		std::string m_languageB;
 		// A string containing the separators used in data files
 		// to separate object properties and list elements
 		std::string m_separators;

@@ -18,7 +18,7 @@ namespace WordLearner
         Q_OBJECT
 
     public:
-        CreateWordDialog(QWidget* parent = nullptr);
+        CreateWordDialog(const std::string languageA, const std::string languageB, QWidget* parent = nullptr);
 
     signals:
         // Signal that's emitted with new word's data when user has finished with this dialog
@@ -31,7 +31,7 @@ namespace WordLearner
     private: /* functions */
         
         // Creates all UI elements of the dialog
-        void createUi();
+        void createUi(const std::string languageA, const std::string languageB);
 
     private: /* variables*/
 
