@@ -7,4 +7,4 @@ it is added to database but not shown in UI (UI is not updated).
 Let's fix that now.
 Done.
 
-TODO: Print an INFO message when user tries to rename the global word set.
+DONE: Print an ERROR message when user tries to rename the global word set.

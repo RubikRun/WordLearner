@@ -68,6 +68,12 @@ namespace WordLearner {
 
 	bool Database::editWordSetName(int wordSetId, const std::string& newName)
 	{
+		// Don't allow renaming of global word set
+		if (wordSetId == 0)
+		{
+			WL_LOG_ERRORF("Trying to rename the global word set. This is not allowed.");
+			return false;
+		}
 		// Get word set
 		WordSet* wordSet = findWordSet(wordSetId);
 		if (wordSet == nullptr)
