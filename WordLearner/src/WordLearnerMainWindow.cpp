@@ -253,11 +253,18 @@ void WordLearner::WordLearnerMainWindow::updateWordsTableWidget(const std::vecto
     {
         const Word& word = words[i];
         // Set columns of table's current row to be the word's term A and term B
-        QTableWidgetItem* itemTermA = new QTableWidgetItem(QString(word.termA.c_str()));
-        QTableWidgetItem* itemTermB = new QTableWidgetItem(QString(word.termB.c_str()));
-        // Set a tooltip that shows word's note. Set it to both items (to the whole row)
-        itemTermA->setToolTip(StringUtils::breakIntoMultipleLines(word.note).c_str());
-        itemTermB->setToolTip(StringUtils::breakIntoMultipleLines(word.note).c_str());
+        const std::string termAView = word.note.empty() ? word.termA : word.termA + "*";
+        const std::string termBView = word.termB;
+        QTableWidgetItem* itemTermA = new QTableWidgetItem(QString(termAView.c_str()));
+        QTableWidgetItem* itemTermB = new QTableWidgetItem(QString(termBView.c_str()));
+        // If word has a note
+        if (!word.note.empty())
+        {
+            // Set a tooltip that shows word's note. Set it to both items (to the whole row)
+            itemTermA->setToolTip(StringUtils::breakIntoMultipleLines(word.note).c_str());
+            itemTermB->setToolTip(StringUtils::breakIntoMultipleLines(word.note).c_str());
+        }
+
         // Add items to words table
         ui.wordsTableWidget->setItem(i, 0, itemTermA);
         ui.wordsTableWidget->setItem(i, 1, itemTermB);

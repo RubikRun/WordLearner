@@ -1,0 +1,21 @@
+ .-.
+(o o) boo!
+| O \   happy halloween!
+ \   \
+  `~~~'
+
+Last time I finished displaying a word's note in a tooltip.
+Now let's add on a small feature to that which is
+to color words that have a note a little differently
+so that user can know which words have a note without hovering over each one and checking.
+
+First let's do it with a hardcoded color.
+Then I want to create a Config class and .config file where such data can be stored and load the color from there.
+
+Okay, wait, this is basically impossible to do in Qt with my current setup
+because I'm setting a stylesheet to my QTableWidget and it overrides all dynamic style changes.
+I researched a bit on the internet and indeed it's not possible.
+
+So let's think of some other way to indicate which words have a note.
+Maybe let's not overthing it and just put an asterisk after the word in language A.
+Okay yeah, that's it, looks good enough.
