@@ -1,0 +1,23 @@
+Last time I started writing this new function
+    std::string breakIntoMultipleLines(const std::string str, int maxLineLength = 80);
+in new files
+    StringUtils.h
+    StringUtils.cpp
+in project Utils.
+Let's finish it now.
+Done.
+Let's try to use it for the tooltips.
+Okay, it works.
+
+And one final thing, let's style the tooltips a little better.
+A stylesheet cannot be set to a tooltip directly because it's not a widget,
+but it can be set to the whole application.
+So let's create a new .css file
+    Application.css
+Load it in ResourceManager,
+and set it to the application in
+    main.cpp
+like that
+    application.setStyleSheet(ResourceManager::getApplicationStylesheet().c_str());
+Okay, looks good now.
+Displaying a word's note is done.

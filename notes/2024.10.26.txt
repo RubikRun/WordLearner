@@ -30,3 +30,29 @@ Then we will need getters for the 2 languages
     std::string getLanguageB() const;
 And finally we can use those 2 languages in UI.
 Done. It works.
+
+Random thought, I should think of a way to display a word's note.
+I don't really want to have a third column in the table,
+because most words will not have notes and some might have long notes.
+I think it'd be more convenient if user can hover over a word with the mouse
+and a small message box to appear displaying the note.
+And maybe we will mark words that have a note somehow,
+for example with a "*" after the word or with a slightly different color.
+
+Let's try to display the note in such a hover box.
+In Qt it's called a "tooltip", and can be set to a widget like that
+    button->setToolTip("This is a tooltip message that appears when you hover.");
+So let's try to set a tooltip with a word's note on each row of the words table.
+We need to set it to each QTableWidgetItem, so to both itemTermA and itemTermB in
+    updateWordsTableWidget()
+It works!
+It even automatically doesn't show a tooltip for the words with an empty note. Nice.
+
+One thing that can be improved is when the note is too long it would be good
+to have it be shown on multiple lines.
+Qt automatically does this when the tooltip is too long for the whole screen to contain,
+which results in very long tooltips sometimes.
+If the note is even longer than what the screen can contain
+then Qt breaks it into multiple lines, indeed.
+But I want to have a finer control over this so I'll just manually insert new lines
+in notes when creating tooltips.

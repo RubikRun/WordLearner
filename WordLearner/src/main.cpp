@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     database.loadDatabase();
     // Create Qt application showing main window and run it
     QApplication application(argc, argv);
+    application.setStyleSheet(ResourceManager::getApplicationStylesheet().c_str());
     WordLearnerMainWindow window(database);
     window.show();
     const int execResult = application.exec();

@@ -4,6 +4,7 @@
 
 #include "ResourceManager.h"
 #include "Logger.hpp"
+#include "StringUtils.h"
 #include "CreateWordDialog.h"
 #include "CreateWordSetDialog.h"
 
@@ -251,9 +252,13 @@ void WordLearner::WordLearnerMainWindow::updateWordsTableWidget(const std::vecto
     for (int i = 0; i < words.size(); ++i)
     {
         const Word& word = words[i];
-        // Set columns of table's current row to be the word's term A, term B and note
+        // Set columns of table's current row to be the word's term A and term B
         QTableWidgetItem* itemTermA = new QTableWidgetItem(QString(word.termA.c_str()));
         QTableWidgetItem* itemTermB = new QTableWidgetItem(QString(word.termB.c_str()));
+        // Set a tooltip that shows word's note. Set it to both items (to the whole row)
+        itemTermA->setToolTip(StringUtils::breakIntoMultipleLines(word.note).c_str());
+        itemTermB->setToolTip(StringUtils::breakIntoMultipleLines(word.note).c_str());
+        // Add items to words table
         ui.wordsTableWidget->setItem(i, 0, itemTermA);
         ui.wordsTableWidget->setItem(i, 1, itemTermB);
         // Add word ID to words IDs list

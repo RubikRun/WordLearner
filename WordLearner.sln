@@ -5,6 +5,7 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WordLearner", "WordLearner\WordLearner.vcxproj", "{E08442B5-8338-4981-8216-7AC1C2451798}"
 	ProjectSection(ProjectDependencies) = postProject
+		{80C6808C-9416-4E1B-AFCE-4E17104DA774} = {80C6808C-9416-4E1B-AFCE-4E17104DA774}
 		{AAC65335-2999-4731-809E-9798143CF65D} = {AAC65335-2999-4731-809E-9798143CF65D}
 	EndProjectSection
 EndProject
