@@ -16,6 +16,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\WordLearnerMainWindow.cpp" />
+    <ClCompile Include="src\WordsTableWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\WordLearnerMainWindow.h" />
@@ -28,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ResourceManager.h" />
+    <ClInclude Include="src\WordsTableWidget.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E08442B5-8338-4981-8216-7AC1C2451798}</ProjectGuid>

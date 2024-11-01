@@ -1,0 +1,35 @@
+Last time I finished displaying a word's note.
+
+Now let's think about editing of a word's note.
+How would user edit a word's note?
+We can't really allow editing inside the tooltip where the note is displayed.
+
+I guess the best option would be to have a context menu that pops up
+when user does right click on a word,
+and that context menu will contain an "Edit note" option
+that will make a small QDialog pop up for editing the word's note.
+This context menu will also be useful later to put a "Delete" option
+and probably other options in the future, so let's do it.
+
+Let's first do the actual context menu in UI with an "Edit note" option
+that calls a slot when clicked.
+
+Maybe now is a good time to refactor the UI code a little bit
+by separating the words table into its own class
+    class WordsTableWidget
+in new files
+    WordsTableWidget.h
+    WordsTableWidget.cpp
+Okay, done.
+Only interesting thing was that I had to pass a callback function
+to WordsTableWidget's constructor
+for retrieving ID of currently selected word set.
+    std::function<int()> getSelectedWordSetIdCallback
+and since this is a member function of WordLearnerMainWindow
+and it's specific to an instance of that class
+I had to pass this callback as argument using std::bind like that
+    ui.wordsTableWidget = new WordsTableWidget(
+        m_database,
+        std::bind(&WordLearnerMainWindow::getSelectedWordSetId, this),
+        this
+    );

@@ -14,7 +14,9 @@
 
 namespace WordLearner
 {
+    class WordsTableWidget;
 
+    // Main window of Word Learner application
     class WordLearnerMainWindow : public QMainWindow
     {
         Q_OBJECT
@@ -44,8 +46,6 @@ namespace WordLearner
 
         // Slot that's called when a word set is edited in UI
         void onWordSetEdited(QListWidgetItem* item);
-        // Slot that's called when a word is edited in UI
-        void onWordEdited(int row, int col);
 
     private: /* functions */
 
@@ -57,8 +57,6 @@ namespace WordLearner
         // Creates the UI elements for words
         void createWordsUi();
 
-        // Updates words table widget to contain the given list of words. Removes all previously added words.
-        void updateWordsTableWidget(const std::vector<Word>& words);
         // Updates word sets list widget to contain the given list of word sets. Removes all previously added word sets.
         // Keeps the currently selected word set selected after the update.
         // Optionally, you can provide ID of the word set to be selected.
@@ -83,17 +81,15 @@ namespace WordLearner
             // Layout for words
             QVBoxLayout* wordsLayout = nullptr;
             // Table widget for showing a list of words
-            QTableWidget* wordsTableWidget = nullptr;
+            WordsTableWidget* wordsTableWidget = nullptr;
             // Button for creating a new word
             QPushButton* createWordButton = nullptr;
         } ui;
 
-        // List of IDs of words that are currently shown in words list widget
-        std::vector<int> m_wordsListIds;
         // List of IDs of word sets that are currently shown in word sets list widget
         std::vector<int> m_wordSetsListIds;
 
-        Database& database;
+        Database& m_database;
     };
 
 } // namespace WordLearner
