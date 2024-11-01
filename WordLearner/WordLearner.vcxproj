@@ -11,19 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CreateWordDialog.cpp" />
-    <ClCompile Include="CreateWordSetDialog.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="src\CreateWordDialog.cpp" />
+    <ClCompile Include="src\CreateWordSetDialog.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\WordLearnerMainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\WordLearnerMainWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="CreateWordDialog.h" />
-    <QtMoc Include="CreateWordSetDialog.h" />
-    <ClInclude Include="ResourceManager.h" />
+    <QtMoc Include="src\CreateWordDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\CreateWordSetDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ResourceManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E08442B5-8338-4981-8216-7AC1C2451798}</ProjectGuid>

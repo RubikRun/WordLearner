@@ -29,13 +29,13 @@
     <ClCompile Include="src\WordLearnerMainWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
+    <ClCompile Include="src\CreateWordDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CreateWordDialog.cpp">
+    <ClCompile Include="src\CreateWordSetDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CreateWordSetDialog.cpp">
+    <ClCompile Include="src\ResourceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -43,15 +43,15 @@
     <QtMoc Include="src\WordLearnerMainWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="CreateWordDialog.h">
+    <QtMoc Include="src\CreateWordDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="CreateWordSetDialog.h">
+    <QtMoc Include="src\CreateWordSetDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ResourceManager.h">
+    <ClInclude Include="src\ResourceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
