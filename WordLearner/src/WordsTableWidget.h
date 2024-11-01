@@ -21,11 +21,18 @@ namespace WordLearner
 		// Updates words table widget to contain the given list of words. Removes all previously added words.
 		void update(const std::vector<Word>& words);
 
+	private: /* functions*/
+
+		// Creates all UI elements of widget
+		void createUi();
+
 	private slots:
+
 		// Slot that's called when a word is edited in UI
 		void onWordEdited(int row, int col);
 
 	private: /* variables */
+
 		// List of IDs of words that are currently shown in table
 		std::vector<int> m_wordsIds;
 

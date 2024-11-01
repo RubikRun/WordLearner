@@ -2,10 +2,9 @@
 
 #include "WordLearnerMainWindow.h"
 
-#include "WordsTableWidget.h"
+#include "WordsWidget.h"
 #include "ResourceManager.h"
 #include "Logger.hpp"
-#include "CreateWordDialog.h"
 #include "CreateWordSetDialog.h"
 
 using namespace WordLearner;
@@ -32,50 +31,11 @@ void WordLearnerMainWindow::onWordSetSelectionChanged()
     }
     // Get words from selected word set
     const std::vector<Word> words = m_database.getWordsFromWordSet(wordSetId);
-    // Update words table widget with words from set
-    ui.wordsTableWidget->update(words);
+    // Update words widget with words from set
+    ui.wordsWidget->update(words);
 }
 
-void WordLearner::WordLearnerMainWindow::onCreateWordButtonPressed()
-{
-    // Create dialog for creating a new word
-    CreateWordDialog createWordDialog(m_database.getLanguageA(), m_database.getLanguageB(), this);
-    // Connect dialog's createWord() signal to our onCreateWord() slot here
-    connect(&createWordDialog, &CreateWordDialog::createWord, this, &WordLearnerMainWindow::onCreateWord);
-    // Open dialog
-    createWordDialog.exec();
-}
-
-void WordLearner::WordLearnerMainWindow::onCreateWord(const std::string& termA, const std::string& termB, const std::string& note)
-{
-    // Create word in database
-    const int wordId = m_database.createWord(termA, termB, note);
-    if (wordId < 0)
-    {
-        WL_LOG_ERRORF("Failed to create new word in database.");
-        return;
-    }
-    // Get selected word set's ID
-    const int wordSetId = getSelectedWordSetId();
-    if (wordSetId < 0)
-    {
-        WL_LOG_ERRORF("Trying to add new word to selected word set, but there is no selected word set.");
-        return;
-    }
-    // Add new word to selected word set.
-    // If selected word set is the global word set,
-    // we don't need to explicitly add new word to it,
-    // because it's automatically added when created.
-    if (wordSetId != 0 && !m_database.addWordToWordSet(wordId, wordSetId))
-    {
-        WL_LOG_ERRORF("Cannot add new word to selected word set.");
-    }
-    // Update words table in UI so that it shows the new word
-    const std::vector<Word> words = m_database.getWordsFromWordSet(wordSetId);
-    ui.wordsTableWidget->update(words);
-}
-
-void WordLearner::WordLearnerMainWindow::onCreateWordSetButtonPressed()
+void WordLearnerMainWindow::onCreateWordSetButtonPressed()
 {
     // Create dialog for creating a new word set
     CreateWordSetDialog createWordSetDialog(this);
@@ -85,7 +45,7 @@ void WordLearner::WordLearnerMainWindow::onCreateWordSetButtonPressed()
     createWordSetDialog.exec();
 }
 
-void WordLearner::WordLearnerMainWindow::onCreateWordSet(const std::string& name)
+void WordLearnerMainWindow::onCreateWordSet(const std::string& name)
 {
     const int wordSetId = m_database.createWordSet(name);
     // Create word set in database
@@ -99,7 +59,7 @@ void WordLearner::WordLearnerMainWindow::onCreateWordSet(const std::string& name
     updateWordSetsListWidget(wordSets, wordSetId);
 }
 
-void WordLearner::WordLearnerMainWindow::onWordSetEdited(QListWidgetItem* item)
+void WordLearnerMainWindow::onWordSetEdited(QListWidgetItem* item)
 {
     // Get index of edited word set
     const int wordSetIndex = ui.wordSetsListWidget->row(item);
@@ -126,24 +86,30 @@ void WordLearner::WordLearnerMainWindow::onWordSetEdited(QListWidgetItem* item)
     updateWordSetsListWidget(wordSets);
 }
 
-void WordLearner::WordLearnerMainWindow::createUi()
+void WordLearnerMainWindow::createUi()
 {
     // Create central widget
     setCentralWidget(new QWidget);
     // Create layout
     ui.layout = new QHBoxLayout;
     centralWidget()->setLayout(ui.layout);
-    // Create words layout and word sets layout
+
+    // Create word sets layout
     ui.wordSetsLayout = new QVBoxLayout;
     ui.layout->addLayout(ui.wordSetsLayout);
-    ui.wordsLayout = new QVBoxLayout;
-    ui.layout->addLayout(ui.wordsLayout);
-    // Create list widgets for words and word sets
+    // Create list widgets for word sets
     createWordSetsUi();
-    createWordsUi();
+
+    // Create words widget
+    ui.wordsWidget = new WordsWidget(
+        m_database,
+        std::bind(&WordLearnerMainWindow::getSelectedWordSetId, this),
+        this
+    );
+    ui.layout->addWidget(ui.wordsWidget);
 }
 
-void WordLearner::WordLearnerMainWindow::createWordSetsUi()
+void WordLearnerMainWindow::createWordSetsUi()
 {
     // Create list widget
     ui.wordSetsListWidget = new QListWidget;
@@ -161,22 +127,7 @@ void WordLearner::WordLearnerMainWindow::createWordSetsUi()
     connect(ui.createWordSetButton, &QPushButton::released, this, &WordLearnerMainWindow::onCreateWordSetButtonPressed);
 }
 
-void WordLearner::WordLearnerMainWindow::createWordsUi()
-{
-    // Create words table widget
-    ui.wordsTableWidget = new WordsTableWidget(
-        m_database,
-        std::bind(&WordLearnerMainWindow::getSelectedWordSetId, this),
-        this
-    );
-    ui.wordsLayout->addWidget(ui.wordsTableWidget);
-    // Create button for adding words
-    ui.createWordButton = new QPushButton("New");
-    ui.wordsLayout->addWidget(ui.createWordButton);
-    connect(ui.createWordButton, &QPushButton::released, this, &WordLearnerMainWindow::onCreateWordButtonPressed);
-}
-
-void WordLearner::WordLearnerMainWindow::updateWordSetsListWidget(const std::vector<WordSet>& wordSets, int selectedWordSetId)
+void WordLearnerMainWindow::updateWordSetsListWidget(const std::vector<WordSet>& wordSets, int selectedWordSetId)
 {
     // Temporarily disconnect word sets list widget's itemChanged() signal
     // for the duration of this function, while we are adding new items,
@@ -222,7 +173,7 @@ void WordLearner::WordLearnerMainWindow::updateWordSetsListWidget(const std::vec
     connect(ui.wordSetsListWidget, &QListWidget::itemChanged, this, &WordLearnerMainWindow::onWordSetEdited);
 }
 
-int WordLearner::WordLearnerMainWindow::getSelectedWordSetId() const
+int WordLearnerMainWindow::getSelectedWordSetId() const
 {
     // Get index of selected word set in list
     const int wordSetIdx = ui.wordSetsListWidget->currentRow();

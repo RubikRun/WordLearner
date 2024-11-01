@@ -14,7 +14,7 @@
 
 namespace WordLearner
 {
-    class WordsTableWidget;
+    class WordsWidget;
 
     // Main window of Word Learner application
     class WordLearnerMainWindow : public QMainWindow
@@ -32,12 +32,6 @@ namespace WordLearner
         // Slot that's called when a new word set is selected in word sets list widget
         void onWordSetSelectionChanged();
 
-        // Slot that's called when the "Create new word" button is pressed
-        void onCreateWordButtonPressed();
-        // Slot that's called when a new word must be created.
-        // It's called with the new word's data.
-        void onCreateWord(const std::string& termA, const std::string& termB, const std::string& note);
-
         // Slot that's called when the "Create new word set" button is pressed
         void onCreateWordSetButtonPressed();
         // Slot that's called when a new word set must be created.
@@ -54,8 +48,6 @@ namespace WordLearner
 
         // Creates the UI elements for word sets
         void createWordSetsUi();
-        // Creates the UI elements for words
-        void createWordsUi();
 
         // Updates word sets list widget to contain the given list of word sets. Removes all previously added word sets.
         // Keeps the currently selected word set selected after the update.
@@ -68,7 +60,7 @@ namespace WordLearner
     private: /* variables */
 
         // Struct for holding together window's UI elements
-        struct UI
+        struct Ui
         {
             // Window's primary layout
             QHBoxLayout* layout = nullptr;
@@ -78,12 +70,8 @@ namespace WordLearner
             QListWidget* wordSetsListWidget = nullptr;
             // Button for creating a new word set
             QPushButton* createWordSetButton = nullptr;
-            // Layout for words
-            QVBoxLayout* wordsLayout = nullptr;
-            // Table widget for showing a list of words
-            WordsTableWidget* wordsTableWidget = nullptr;
-            // Button for creating a new word
-            QPushButton* createWordButton = nullptr;
+            // Widget for showing, editing, creating and deleting words
+            WordsWidget* wordsWidget = nullptr;
         } ui;
 
         // List of IDs of word sets that are currently shown in word sets list widget
