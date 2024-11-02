@@ -11,11 +11,14 @@
 
 using namespace WordLearner;
 
-WordsTableWidget::WordsTableWidget(Database& database, std::function<int()> getSelectedWordSetIdCallback, QWidget* parent)
+WordsTableWidget::WordsTableWidget(QWidget* parent)
 	: QTableWidget(parent)
-    , m_database(database)
-    , m_getSelectedWordSetIdCallback(getSelectedWordSetIdCallback)
+{}
+
+void WordsTableWidget::init(Database* database, std::function<int()> getSelectedWordSetIdCallback)
 {
+    m_database = database;
+    m_getSelectedWordSetIdCallback = getSelectedWordSetIdCallback;
     createUi();
 }
 
@@ -60,22 +63,32 @@ void WordsTableWidget::update(const std::vector<Word>& words)
 
 void WordsTableWidget::createUi()
 {
+    if (m_database == nullptr)
+    {
+        WL_LOG_ERRORF("Trying to create UI of words table widget but no database is given. Try properly initializing it.");
+        return;
+    }
     // Set 2 columns with names of language A and language B
     setColumnCount(2);
     setHorizontalHeaderLabels({
-        QString(m_database.getLanguageA().c_str()),
-        QString(m_database.getLanguageB().c_str())
+        QString(m_database->getLanguageA().c_str()),
+        QString(m_database->getLanguageB().c_str())
         });
     // Set stylesheet and other styling options
     setStyleSheet(ResourceManager::getTableWidgetStylesheet().c_str());
     horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     // Fill table widget with words from database
-    const std::vector<Word>& words = m_database.getWords();
+    const std::vector<Word>& words = m_database->getWords();
     update(words);
 }
 
 void WordsTableWidget::onWordEdited(int row, int col)
 {
+    if (m_database == nullptr)
+    {
+        WL_LOG_ERRORF("Trying to edit a word but words table widget is not yet initialized.");
+        return;
+    }
     QTableWidgetItem* tableItem = item(row, col);
     if (!tableItem)
     {
@@ -95,7 +108,7 @@ void WordsTableWidget::onWordEdited(int row, int col)
     if (col == 0)
     {
         // Edit word's term A in database
-        if (!m_database.editWordTermA(wordId, editedStr))
+        if (!m_database->editWordTermA(wordId, editedStr))
         {
             WL_LOG_ERRORF("Failed to edit word's term A in database.");
         }
@@ -104,7 +117,7 @@ void WordsTableWidget::onWordEdited(int row, int col)
     else if (col == 1)
     {
         // Edit word's term B in database
-        if (!m_database.editWordTermB(wordId, editedStr))
+        if (!m_database->editWordTermB(wordId, editedStr))
         {
             WL_LOG_ERRORF("Failed to edit word's term B in database.");
         }
@@ -120,6 +133,6 @@ void WordsTableWidget::onWordEdited(int row, int col)
     // we would want to show the old property in UI, to indicate to user that the property they entered did not succeed.
     // In both cases, we just want UI to contain the current properties of words from database, so just do update here.
     const int selectedWordSetId = m_getSelectedWordSetIdCallback();
-    const std::vector<Word>& words = m_database.getWordsFromWordSet(selectedWordSetId);
+    const std::vector<Word>& words = m_database->getWordsFromWordSet(selectedWordSetId);
     update(words);
 }

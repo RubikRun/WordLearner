@@ -15,8 +15,11 @@ namespace WordLearner
 	class WordsTableWidget : public QTableWidget
 	{
 	public:
-		// Creates a table widget for the words of a given database
-		WordsTableWidget(Database& database, std::function<int()> getSelectedWordSetIdCallback, QWidget* parent = nullptr);
+		// Creates an empty words table widget. Must be initialized by calling init() later.
+		WordsTableWidget(QWidget* parent = nullptr);
+
+		// Initializes table widget with words from a given database
+		void init(Database* database, std::function<int()> getSelectedWordSetIdCallback);
 
 		// Updates words table widget to contain the given list of words. Removes all previously added words.
 		void update(const std::vector<Word>& words);
@@ -39,7 +42,7 @@ namespace WordLearner
 		// Callback function to retrieve ID of currently selected word set
 		std::function<int()> m_getSelectedWordSetIdCallback;
 
-		Database& m_database;
+		Database* m_database;
 	};
 
 } // namespace WordLearner

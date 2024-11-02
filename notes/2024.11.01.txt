@@ -45,3 +45,12 @@ in files
 that will contain all widgets for interacting of words,
 for now WordsTableWidget and createWordButton.
 Okay, done, nothing interesting to say here.
+
+While we're at it,
+let's also refactor the word sets part of UI
+to have everything cleanly separated.
+Create a new class
+    WordSetsListWidget
+in files
+    WordSetsListWidget.h
+    WordSetsListWidget.cpp

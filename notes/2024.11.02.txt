@@ -1,0 +1,17 @@
+Okay, there's a problem here in my function parameters logic.
+This class
+    WordsWidget
+inside of its constructor requires a function pointer to a member function of this class
+    WordSetsListWidget
+but this class itself inside of its constructor requires a function pointer to a member function of
+    WordsWidget
+So whichever we create first will be a problem
+because we will still not have a valid pointer to the other.
+The only solution here is to not set these function pointers in the constructors of the 2 classes.
+Instead we can have set..Callback() methods or better yet have the whole initialization logic
+inside a method
+    init()
+instead of in the constructor.
+That was a bit messy but it's ready now.
+I refactored the word sets list logic into a class
+    WordSetsListWidget
