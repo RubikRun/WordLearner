@@ -1,0 +1,2 @@
+Today I finished refactoring word sets section of UI into
+    WordSetsWidget

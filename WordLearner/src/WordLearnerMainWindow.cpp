@@ -3,10 +3,9 @@
 #include "WordLearnerMainWindow.h"
 
 #include "WordsWidget.h"
-#include "WordSetsListWidget.h"
+#include "WordSetsWidget.h"
 #include "ResourceManager.h"
 #include "Logger.hpp"
-#include "CreateWordSetDialog.h"
 
 using namespace WordLearner;
 
@@ -22,30 +21,6 @@ WordLearnerMainWindow::WordLearnerMainWindow(Database& database, QWidget *parent
 WordLearnerMainWindow::~WordLearnerMainWindow()
 {}
 
-void WordLearnerMainWindow::onCreateWordSetButtonPressed()
-{
-    // Create dialog for creating a new word set
-    CreateWordSetDialog createWordSetDialog(this);
-    // Connect dialog's createWordSet() signal to our onCreateWordSet() slot here
-    connect(&createWordSetDialog, &CreateWordSetDialog::createWordSet, this, &WordLearnerMainWindow::onCreateWordSet);
-    // Open dialog
-    createWordSetDialog.exec();
-}
-
-void WordLearnerMainWindow::onCreateWordSet(const std::string& name)
-{
-    const int wordSetId = m_database.createWordSet(name);
-    // Create word set in database
-    if (wordSetId < 0)
-    {
-        WL_LOG_ERRORF("Failed to create new word set in database.");
-        return;
-    }
-    // Update word sets list in UI so that it shows the new word set
-    const std::vector<WordSet>& wordSets = m_database.getWordSets();
-    ui.wordSetsListWidget->update(wordSets, wordSetId);
-}
-
 void WordLearnerMainWindow::createUi()
 {
     // Create central widget
@@ -54,20 +29,16 @@ void WordLearnerMainWindow::createUi()
     ui.layout = new QHBoxLayout;
     centralWidget()->setLayout(ui.layout);
 
-    // Create word sets layout
-    ui.wordSetsLayout = new QVBoxLayout;
-    ui.layout->addLayout(ui.wordSetsLayout);
-
-    // First create both word sets list widget and words widget,
+    // First create both word sets widget and words widget,
     // without initializing them,
     // because their initializations depend on each other.
-    ui.wordSetsListWidget = new WordSetsListWidget(this);
-    ui.wordSetsLayout->addWidget(ui.wordSetsListWidget);
+    ui.wordSetsWidget = new WordSetsWidget(this);
+    ui.layout ->addWidget(ui.wordSetsWidget);
     ui.wordsWidget = new WordsWidget(this);
     ui.layout->addWidget(ui.wordsWidget);
     // Then initialize them
     WordsWidget* wordsWidget = ui.wordsWidget;
-    ui.wordSetsListWidget->init(
+    ui.wordSetsWidget->init(
         &m_database,
         // NOTE: std::bind() doesn't work here for some reason, so use lambda instead
         [wordsWidget](const std::vector<Word>& words) {
@@ -76,11 +47,6 @@ void WordLearnerMainWindow::createUi()
     );
     ui.wordsWidget->init(
         &m_database,
-        std::bind(&WordSetsListWidget::getSelectedWordSetId, ui.wordSetsListWidget)
+        std::bind(&WordSetsWidget::getSelectedWordSetId, ui.wordSetsWidget)
     );
-
-    // Create button for adding word sets
-    ui.createWordSetButton = new QPushButton("New");
-    ui.wordSetsLayout->addWidget(ui.createWordSetButton);
-    connect(ui.createWordSetButton, &QPushButton::released, this, &WordLearnerMainWindow::onCreateWordSetButtonPressed);
 }

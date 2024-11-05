@@ -15,3 +15,7 @@ instead of in the constructor.
 That was a bit messy but it's ready now.
 I refactored the word sets list logic into a class
     WordSetsListWidget
+
+Now let's also refactor the whole word sets section into a new class
+    WordSetsWidget
+For now it will be made up of WordSetsListWidget and createWordSetButton in a QVBoxLayout.

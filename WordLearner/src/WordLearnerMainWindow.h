@@ -15,7 +15,7 @@
 namespace WordLearner
 {
     class WordsWidget;
-    class WordSetsListWidget;
+    class WordSetsWidget;
 
     // Main window of Word Learner application
     class WordLearnerMainWindow : public QMainWindow
@@ -27,14 +27,6 @@ namespace WordLearner
         // Creates a WordLearner main window with data from given database
         WordLearnerMainWindow(Database& database, QWidget* parent = nullptr);
         ~WordLearnerMainWindow();
-
-    private slots:
-
-        // Slot that's called when the "Create new word set" button is pressed
-        void onCreateWordSetButtonPressed();
-        // Slot that's called when a new word set must be created.
-        // It's called with the new word set's data.
-        void onCreateWordSet(const std::string& name);
 
     private: /* functions */
 
@@ -48,12 +40,8 @@ namespace WordLearner
         {
             // Window's primary layout
             QHBoxLayout* layout = nullptr;
-            // Layout for word sets
-            QVBoxLayout* wordSetsLayout = nullptr;
-            // List widget for showing a list of word sets
-            WordSetsListWidget* wordSetsListWidget = nullptr;
-            // Button for creating a new word set
-            QPushButton* createWordSetButton = nullptr;
+            // Widget for showing, editing, creating and deleting word sets
+            WordSetsWidget* wordSetsWidget = nullptr;
             // Widget for showing, editing, creating and deleting words
             WordsWidget* wordsWidget = nullptr;
         } ui;

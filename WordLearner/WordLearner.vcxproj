@@ -17,6 +17,7 @@
     <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\WordLearnerMainWindow.cpp" />
     <ClCompile Include="src\WordSetsListWidget.cpp" />
+    <ClCompile Include="src\WordSetsWidget.cpp" />
     <ClCompile Include="src\WordsTableWidget.cpp" />
     <ClCompile Include="src\WordsWidget.cpp" />
   </ItemGroup>
@@ -32,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="src\ResourceManager.h" />
     <ClInclude Include="src\WordSetsListWidget.h" />
+    <ClInclude Include="src\WordSetsWidget.h" />
     <ClInclude Include="src\WordsTableWidget.h" />
     <ClInclude Include="src\WordsWidget.h" />
   </ItemGroup>
