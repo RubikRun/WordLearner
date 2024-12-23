@@ -142,12 +142,6 @@ namespace WordLearner {
 			WL_LOG_ERRORF("Trying to edit (set new note) a non-existing word with ID = " << wordId);
 			return false;
 		}
-		// Check if new note is valid, non-empty.
-		if (newNote.empty())
-		{
-			WL_LOG_ERRORF("Trying to edit (set new note) a word with ID = " << wordId << " and set an empty note");
-			return false;
-		}
 		// Set new note to word
 		word->note = newNote;
 		return true;

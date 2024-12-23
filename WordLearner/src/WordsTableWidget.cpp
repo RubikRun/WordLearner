@@ -2,6 +2,7 @@
 
 #include "WordsTableWidget.h"
 
+#include "EditNoteDialog.h"
 #include "Database.h"
 #include "ResourceManager.h"
 #include "Logger.hpp"
@@ -62,6 +63,15 @@ void WordsTableWidget::update(const std::vector<Word>& words)
     connect(this, &QTableWidget::cellChanged, this, &WordsTableWidget::onWordEdited);
 }
 
+void WordsTableWidget::update()
+{
+    // Get words of selected word set
+    const int selectedWordSetId = m_getSelectedWordSetIdCallback();
+    const std::vector<Word>& words = m_database->getWordsFromWordSet(selectedWordSetId);
+    // Update table widget to contain those words
+    update(words);
+}
+
 void WordsTableWidget::createUi()
 {
     if (m_database == nullptr)
@@ -88,9 +98,8 @@ void WordsTableWidget::createUi()
 
 void WordsTableWidget::showContextMenu(const QPoint& pos)
 {
-    const int wordIndex = pos.y();
     // Get the item at the clicked position
-    QTableWidgetItem* item = itemAt(pos);
+    const QTableWidgetItem* item = itemAt(pos);
     // If there is no item under the cursor
     if (item == nullptr)
     {
@@ -98,21 +107,72 @@ void WordsTableWidget::showContextMenu(const QPoint& pos)
         return;
     }
 
+    // Get word's index
+    const int wordIndex = item->row();
+    if (wordIndex < 0 || wordIndex >= m_wordsIds.size())
+    {
+        WL_LOG_ERRORF("Trying to show a context menu for a word in table but word's index is invalid.");
+        return;
+    }
+    // Get word's ID
+    const int wordId = m_wordsIds[wordIndex];
+
     // Create context menu
     QMenu contextMenu(this);
     // Create an action for editing a word's note
     QAction* editNoteAction = contextMenu.addAction("Edit note");
     // Connect action's triggered slot with our custom slot for editing a note
-    connect(editNoteAction, &QAction::triggered, this, [this, wordIndex]() { editNote(wordIndex); });
+    connect(editNoteAction, &QAction::triggered, this, [this, wordId]() { onEditNoteOptionClicked(wordId); });
 
     // Show the menu at the global position of the cursor
     contextMenu.exec(viewport()->mapToGlobal(pos));
 }
 
-void WordsTableWidget::editNote(int wordIndex)
+void WordsTableWidget::onEditNoteOptionClicked(int wordId)
 {
-    // TODO
-    WL_LOG_INFO("editNote(" << wordIndex << ")");
+    if (m_database == nullptr)
+    {
+        WL_LOG_ERRORF("Trying to edit a word's note but words table widget is not yet initialized.");
+        return;
+    }
+
+    // Find word from given word ID.
+    // NOTE: Database needs to be casted to const pointer,
+    //       because otherwise it looks for the non-const version of findWord() which is private.
+    const Word* word = static_cast<const Database*>(m_database)->findWord(wordId);
+    if (word == nullptr)
+    {
+        WL_LOG_ERRORF("Trying to edit a word's note but word with given ID doesn't exist in database.");
+        return;
+    }
+    const std::string& oldNote = word->note;
+
+    // Create dialog for editing a note
+    EditNoteDialog editNoteDialog(oldNote, this);
+    // Connect dialog's editNote() signal to our onNoteEdited() slot here
+    connect
+    (
+        &editNoteDialog,
+        &EditNoteDialog::editNote,
+        this,
+        // NOTE: std::bind() doesn't work here for some reason, so use lambda instead
+        [this, wordId](const std::string& newNote)
+        {
+            this->onNoteEdited(wordId, newNote);
+        }
+    );
+    // Open dialog
+    editNoteDialog.exec();
+}
+
+void WordsTableWidget::onNoteEdited(int wordId, const std::string& newNote)
+{
+    if (!m_database->editWordNote(wordId, newNote))
+    {
+        WL_LOG_ERRORF("Failed to edit a word's note.");
+    }
+    // Update words in UI to show the new note
+    update();
 }
 
 void WordsTableWidget::onWordEdited(int row, int col)
@@ -165,7 +225,5 @@ void WordsTableWidget::onWordEdited(int row, int col)
     // but in case word failed to update in database,
     // we would want to show the old property in UI, to indicate to user that the property they entered did not succeed.
     // In both cases, we just want UI to contain the current properties of words from database, so just do update here.
-    const int selectedWordSetId = m_getSelectedWordSetIdCallback();
-    const std::vector<Word>& words = m_database->getWordsFromWordSet(selectedWordSetId);
-    update(words);
+    update();
 }

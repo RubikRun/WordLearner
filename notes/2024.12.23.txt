@@ -1,0 +1,12 @@
+I did a big pause of ~50 days, because I had other side projects going on.
+But now let's continue.
+
+Last time I made a context menu that pops up when user right clicks on a word.
+It contains a single option - "Edit note".
+Currently it does nothing.
+Let's create a small dialog that pops up when that option is clicked.
+This dialog should contain a text edit with the current note,
+that can be edited,
+and an Ok button for saving the new note and closing the dialog.
+Done.
+

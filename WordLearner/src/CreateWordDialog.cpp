@@ -2,7 +2,7 @@
 
 using namespace WordLearner;
 
-CreateWordDialog::CreateWordDialog(const std::string languageA, const std::string languageB, QWidget* parent)
+CreateWordDialog::CreateWordDialog(const std::string& languageA, const std::string& languageB, QWidget* parent)
     : QDialog(parent)
 {
     setWindowTitle("Create new word");
@@ -21,7 +21,7 @@ void CreateWordDialog::onCreateWordButtonClicked() {
     accept();
 }
 
-void WordLearner::CreateWordDialog::createUi(const std::string languageA, const std::string languageB)
+void WordLearner::CreateWordDialog::createUi(const std::string& languageA, const std::string& languageB)
 {
     // Create layout
     ui.layout = new QVBoxLayout;

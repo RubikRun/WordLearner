@@ -38,6 +38,15 @@ namespace WordLearner {
 			return m_languageB;
 		}
 
+		// Finds word with a given ID in database
+		// @param[in] id - ID of the word to find
+		// @return Pointer to the found word. Nullptr if word is not found.
+		const Word* findWord(int id) const;
+		// Finds word set with a given ID in database
+		// @param[in] id - ID of the word set to find
+		// @return Pointer to the found word set. Nullptr if word set is not found.
+		const WordSet* findWordSet(int id) const;
+
 		// Creates a new word in database from given data.
 		// Adds new word to global word set.
 		// Returns created word's ID.
@@ -116,12 +125,10 @@ namespace WordLearner {
 		// Finds word with a given ID in database
 		// @param[in] id - ID of the word to find
 		// @return Pointer to the found word. Nullptr if word is not found.
-		const Word* findWord(int id) const;
 		Word* findWord(int id);
 		// Finds word set with a given ID in database
 		// @param[in] id - ID of the word set to find
 		// @return Pointer to the found word set. Nullptr if word set is not found.
-		const WordSet* findWordSet(int id) const;
 		WordSet* findWordSet(int id);
 
 		// Checks if given ID exists across all object types

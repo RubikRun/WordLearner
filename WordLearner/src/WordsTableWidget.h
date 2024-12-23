@@ -23,6 +23,8 @@ namespace WordLearner
 
 		// Updates words table widget to contain the given list of words. Removes all previously added words.
 		void update(const std::vector<Word>& words);
+		// Updates words table widget to contain the words of currently selected word set. Removes all previously added words.
+		void update();
 
 	private: /* functions*/
 
@@ -31,15 +33,17 @@ namespace WordLearner
 
 	private slots:
 
+		void onNoteEdited(int wordId, const std::string& newNote);
+
 		// Slot that's called when a word is edited in UI
 		void onWordEdited(int row, int col);
 
 		// Slot that's called when a context menu must be shown at some item
 		void showContextMenu(const QPoint& pos);
 
-		// Slot that's called when user wants to edit note of a given word.
+		// Slot that's called when user clicks "Edit note" option on a given word.
 		// Opens up a small dialog where user can edit word's note.
-		void editNote(int wordIndex);
+		void onEditNoteOptionClicked(int wordId);
 
 	private: /* variables */
 
