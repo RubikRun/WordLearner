@@ -8,6 +8,7 @@
 #include "StringUtils.h"
 
 #include <QHeaderView>
+#include <QMenu>
 
 using namespace WordLearner;
 
@@ -68,6 +69,9 @@ void WordsTableWidget::createUi()
         WL_LOG_ERRORF("Trying to create UI of words table widget but no database is given. Try properly initializing it.");
         return;
     }
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    // Connect context menu signal with our custom slot for showing the context menu
+    connect(this, &QTableWidget::customContextMenuRequested, this, &WordsTableWidget::showContextMenu);
     // Set 2 columns with names of language A and language B
     setColumnCount(2);
     setHorizontalHeaderLabels({
@@ -80,6 +84,35 @@ void WordsTableWidget::createUi()
     // Fill table widget with words from database
     const std::vector<Word>& words = m_database->getWords();
     update(words);
+}
+
+void WordsTableWidget::showContextMenu(const QPoint& pos)
+{
+    const int wordIndex = pos.y();
+    // Get the item at the clicked position
+    QTableWidgetItem* item = itemAt(pos);
+    // If there is no item under the cursor
+    if (item == nullptr)
+    {
+        // just don't show context menu
+        return;
+    }
+
+    // Create context menu
+    QMenu contextMenu(this);
+    // Create an action for editing a word's note
+    QAction* editNoteAction = contextMenu.addAction("Edit note");
+    // Connect action's triggered slot with our custom slot for editing a note
+    connect(editNoteAction, &QAction::triggered, this, [this, wordIndex]() { editNote(wordIndex); });
+
+    // Show the menu at the global position of the cursor
+    contextMenu.exec(viewport()->mapToGlobal(pos));
+}
+
+void WordsTableWidget::editNote(int wordIndex)
+{
+    // TODO
+    WL_LOG_INFO("editNote(" << wordIndex << ")");
 }
 
 void WordsTableWidget::onWordEdited(int row, int col)

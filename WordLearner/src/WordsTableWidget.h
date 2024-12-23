@@ -34,6 +34,13 @@ namespace WordLearner
 		// Slot that's called when a word is edited in UI
 		void onWordEdited(int row, int col);
 
+		// Slot that's called when a context menu must be shown at some item
+		void showContextMenu(const QPoint& pos);
+
+		// Slot that's called when user wants to edit note of a given word.
+		// Opens up a small dialog where user can edit word's note.
+		void editNote(int wordIndex);
+
 	private: /* variables */
 
 		// List of IDs of words that are currently shown in table

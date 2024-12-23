@@ -1,2 +1,13 @@
 Today I finished refactoring word sets section of UI into
     WordSetsWidget
+
+----------
+
+Before this refactoring side quest began
+I wanted to implement editing of notes.
+And I wanted to do it with a context menu that pops up when user does right click on a word
+and contains an option "Edit note" and later would contain "Delete word" and other options.
+
+So now let's do this context menu with an "Edit note" option.
+Okay I made the context menu with an "Edit note" option that currenty does nothing.
+Next time, make it pop up a dialog for editing the note.
