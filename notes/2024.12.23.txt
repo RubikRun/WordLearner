@@ -10,3 +10,9 @@ that can be edited,
 and an Ok button for saving the new note and closing the dialog.
 Done.
 
+TODO: On a brand new environment, without a "data" folder
+and without ".data" files inside of it,
+make the application create those files and directory if they are missing.
+(We only need languages and separators)
+Currently it produces a bug.
+
